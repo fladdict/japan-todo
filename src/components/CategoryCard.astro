@@ -12,7 +12,10 @@ const { id, title, description, issues = [] } = Astro.props;
 ---
 
 <article class="card category-card">
-  <h3><a href={sitePath(`/categories/${id}`)}>{title}</a></h3>
+  <h3>
+    <a href={sitePath(`/categories/${id}`)}>{title}</a>
+    <span class="category-count">{issues.length}件</span>
+  </h3>
   <p>{description}</p>
   {issues.length > 0 ? (
     <ul class="category-issues">
