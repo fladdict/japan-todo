@@ -75,6 +75,14 @@ h3 { margin-top: 32px; }
   font-weight: 700;
 }
 .badge.draft { background: var(--danger-soft); color: #8a3d21; }
+.ratings { gap: 16px; }
+.rating { display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; }
+.rating-label { font-weight: 700; color: var(--muted); }
+.rating-dots { letter-spacing: 1px; font-size: 0.8rem; }
+.rating.urgency .rating-dots { color: #b4541f; }
+.rating.severity .rating-dots { color: #8a2d2d; }
+.rating-dots .rating-empty { color: var(--line); }
+.mini-rating { flex: none; font-size: 0.72rem; color: var(--muted); white-space: nowrap; }
 .category-count {
   margin-left: 8px;
   font-size: 0.8rem;

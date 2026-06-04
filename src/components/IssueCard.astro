@@ -1,18 +1,18 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { sitePath } from '../lib/url';
+import Rating from './Rating.astro';
 
 interface Props {
   issue: CollectionEntry<'issues'>;
 }
 const { issue } = Astro.props;
-const isDraft = issue.data.status !== 'published';
 ---
 
 <article class="card">
-  <div class="meta">
-    <span class:list={["badge", isDraft && "draft"]}>{issue.data.status}</span>
-    <span class="badge">{issue.data.priority}</span>
+  <div class="meta ratings">
+    <Rating label="緊急度" value={issue.data.urgency} variant="urgency" />
+    <Rating label="深刻度" value={issue.data.severity} variant="severity" />
   </div>
   <h3><a href={sitePath(`/issues/${issue.id}`)}>{issue.data.title}</a></h3>
   <p>{issue.data.description}</p>

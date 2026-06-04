@@ -1,0 +1,17 @@
+---
+interface Props {
+  label: string;
+  value: number;
+  max?: number;
+  variant?: string;
+}
+const { label, value, max = 5, variant = '' } = Astro.props;
+const filled = Math.max(0, Math.min(max, value));
+---
+
+<span class:list={["rating", variant]}>
+  <span class="rating-label">{label}</span>
+  <span class="rating-dots" aria-label={`5段階中 ${value}`}>
+    {'●'.repeat(filled)}<span class="rating-empty">{'●'.repeat(max - filled)}</span>
+  </span>
+</span>

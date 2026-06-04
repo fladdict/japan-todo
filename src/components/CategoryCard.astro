@@ -22,9 +22,9 @@ const { id, title, description, issues = [] } = Astro.props;
       {issues.map((issue) => (
         <li>
           <a href={sitePath(`/issues/${issue.id}`)}>{issue.data.title}</a>
-          {issue.data.status !== 'published' && (
-            <span class="badge draft">{issue.data.status}</span>
-          )}
+          <span class="mini-rating" aria-label={`緊急度${issue.data.urgency}・深刻度${issue.data.severity}（各5段階）`}>
+            緊{issue.data.urgency}・深{issue.data.severity}
+          </span>
         </li>
       ))}
     </ul>

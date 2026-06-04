@@ -17,6 +17,10 @@ const issues = defineCollection({
     status: issueStatus.default('draft'),
     priority: priority.default('medium'),
     maturity: maturity.default('stub'),
+    // 緊急度: 着手の時間的切迫度（5=もはや手遅れ気味で即時着手必須 … 1=長期にゆっくりでよい）
+    urgency: z.number().int().min(1).max(5).default(3),
+    // 深刻度: 放置した場合の被害の大きさ・存立への影響（5=社会の存立に関わる … 1=改善が望ましいが致命的でない）
+    severity: z.number().int().min(1).max(5).default(3),
     // 30秒要約（Layer 1）: 何が問題か / なぜ今か / 最初にやるべきこと など3点前後
     summary: z.array(z.string()).default([]),
     // 関連課題: 他カードの id（例: "population/low-birthrate"）

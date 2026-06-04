@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import EvidenceBox from '../../components/EvidenceBox.astro';
+import Rating from '../../components/Rating.astro';
 import { sitePath } from '../../lib/url';
 
 export async function getStaticPaths() {
@@ -31,10 +32,11 @@ const fmtDate = (date: Date) => date.toISOString().slice(0, 10);
     <p class="eyebrow">{d.category} / {d.subcategory}</p>
     <h1>{d.title}</h1>
     <p class="lead">{d.description}</p>
+    <div class="meta ratings">
+      <Rating label="緊急度" value={d.urgency} variant="urgency" />
+      <Rating label="深刻度" value={d.severity} variant="severity" />
+    </div>
     <div class="meta">
-      <span class:list={["badge", d.status !== 'published' && "draft"]}>{d.status}</span>
-      <span class="badge">優先度: {d.priority}</span>
-      <span class="badge">成熟度: {d.maturity}</span>
       <span class="badge">最終確認: {fmtDate(d.last_reviewed)}</span>
       {d.actors.map((actor) => <span class="badge">{actor}</span>)}
       {d.capital.map((capital) => <span class="badge">{capital}</span>)}
