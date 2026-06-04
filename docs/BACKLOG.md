@@ -59,8 +59,16 @@ L3 draft-issue（速）→ enrich-issue（深）   カード本文を書く
 | aging-society | 高齢化と長寿社会 | 5 | 5 | 骨子 |
 | caregiving-workforce | 介護の担い手不足 | 4 | 4 | 骨子 |
 | generational-equity | 世代間公平と人口減少 | 3 | 4 | 骨子 |
+| single-person-households | 世帯の単身化と家族の多様化 | 3 | 3 | 骨子 |
 
-- 候補（plan-agenda で精査）: 医療提供体制・地域医療、ヤングケアラー / 家族の多様化
+**L2 点検（2026-06-05）**: 宣言スコープ（少子化・高齢化・介護・世代間公平）は既存4枚でカバー済み。
+追加の構造ギャップとして **世帯の単身化と家族の多様化** を新設（骨子化）。
+根拠: 国立社会保障・人口問題研究所「日本の世帯数の将来推計（令和6年推計）」で
+65歳以上の単独世帯が737.8万（2020）→1083.9万（2050）へ増加見込み。
+
+- 粒度ゲートで**カードにしない**（既存に内包）: ヤングケアラー→caregiving-workforce、
+  認知症→aging-society、未婚化・結婚→low-birthrate、高齢者の就労・社会参加→aging-society。
+- **他分類へ**: 医療提供体制（医師偏在・地域医療構想）は population でなく governance/regional で扱う（要 L2）。
 
 ## 人的資本・働き方・教育（human-capital）
 
