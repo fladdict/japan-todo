@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import IssueCard from '../../components/IssueCard.astro';
+import { categories, getCategoryById } from '../../data/categories';
+
+export function getStaticPaths() {
+  return categories.map((category) => ({ params: { category: category.id }, props: { category } }));
+}
+
+const { category } = Astro.props;
+const issues = (await getCollection('issues'))
+  .filter((issue) => issue.data.category === category.title)
+  .sort((a, b) => a.data.title.localeCompare(b.data.title, 'ja'));
+---
+
+<BaseLayout title={category.title} description={category.description}>
+  <h1>{category.title}</h1>
+  <p class="lead">{category.description}</p>
+  <div class="grid">
+    {issues.map((issue) => <IssueCard issue={issue} />)}
+  </div>
+</BaseLayout>

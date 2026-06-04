@@ -1,0 +1,15 @@
+---
+import { sitePath } from '../lib/url';
+
+interface Props {
+  id: string;
+  title: string;
+  description: string;
+}
+const { id, title, description } = Astro.props;
+---
+
+<article class="card">
+  <h3><a href={sitePath(`/categories/${id}`)}>{title}</a></h3>
+  <p>{description}</p>
+</article>

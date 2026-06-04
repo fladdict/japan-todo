@@ -1,0 +1,29 @@
+---
+interface Source {
+  title: string;
+  url: string;
+  publisher?: string;
+  date?: string;
+}
+interface Props {
+  sources: Source[];
+}
+const { sources } = Astro.props;
+---
+
+<section class="sources" aria-labelledby="sources-heading">
+  <h2 id="sources-heading">主要データ・出典</h2>
+  {sources.length === 0 ? (
+    <p>出典は未登録です。公開前に一次情報・公的統計・信頼できる研究を追加してください。</p>
+  ) : (
+    <ol>
+      {sources.map((source) => (
+        <li>
+          <a href={source.url}>{source.title}</a>
+          {source.publisher && <> — {source.publisher}</>}
+          {source.date && <>（{source.date}）</>}
+        </li>
+      ))}
+    </ol>
+  )}
+</section>

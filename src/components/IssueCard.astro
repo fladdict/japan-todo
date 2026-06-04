@@ -1,0 +1,23 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { sitePath } from '../lib/url';
+
+interface Props {
+  issue: CollectionEntry<'issues'>;
+}
+const { issue } = Astro.props;
+const isDraft = issue.data.status !== 'published';
+---
+
+<article class="card">
+  <div class="meta">
+    <span class:list={["badge", isDraft && "draft"]}>{issue.data.status}</span>
+    <span class="badge">{issue.data.priority}</span>
+  </div>
+  <h3><a href={sitePath(`/issues/${issue.id}`)}>{issue.data.title}</a></h3>
+  <p>{issue.data.description}</p>
+  <div class="meta" aria-label="Tags">
+    <span class="badge">{issue.data.category}</span>
+    {issue.data.time_horizon.map((tag) => <span class="badge">{tag}</span>)}
+  </div>
+</article>

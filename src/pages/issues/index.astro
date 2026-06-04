@@ -1,0 +1,15 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import IssueCard from '../../components/IssueCard.astro';
+
+const issues = (await getCollection('issues')).sort((a, b) => a.data.title.localeCompare(b.data.title, 'ja'));
+---
+
+<BaseLayout title="課題一覧">
+  <h1>課題一覧</h1>
+  <p class="lead">各課題は、問題の構造、先送りされてきた理由、政府・企業・自治体・個人が取れる行動を同じ型で整理します。</p>
+  <div class="grid">
+    {issues.map((issue) => <IssueCard issue={issue} />)}
+  </div>
+</BaseLayout>

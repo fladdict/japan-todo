@@ -1,0 +1,33 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import EvidenceBox from '../../components/EvidenceBox.astro';
+
+export async function getStaticPaths() {
+  const issues = await getCollection('issues');
+  return issues.map((issue) => ({
+    params: { slug: issue.id },
+    props: { issue },
+  }));
+}
+
+const { issue } = Astro.props;
+const { Content } = await render(issue);
+---
+
+<BaseLayout title={issue.data.title} description={issue.data.description}>
+  <article class="issue-body">
+    <p class="eyebrow">{issue.data.category} / {issue.data.subcategory}</p>
+    <h1>{issue.data.title}</h1>
+    <p class="lead">{issue.data.description}</p>
+    <div class="meta">
+      <span class:list={["badge", issue.data.status !== 'published' && "draft"]}>{issue.data.status}</span>
+      <span class="badge">優先度: {issue.data.priority}</span>
+      <span class="badge">最終確認: {issue.data.last_reviewed.toISOString().slice(0, 10)}</span>
+      {issue.data.actors.map((actor) => <span class="badge">{actor}</span>)}
+      {issue.data.capital.map((capital) => <span class="badge">{capital}</span>)}
+    </div>
+    <Content />
+    <EvidenceBox sources={issue.data.sources} />
+  </article>
+</BaseLayout>
