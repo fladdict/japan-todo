@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import EvidenceBox from '../../components/EvidenceBox.astro';
+import { sitePath } from '../../lib/url';
 
 export async function getStaticPaths() {
   const issues = await getCollection('issues');
@@ -12,22 +13,69 @@ export async function getStaticPaths() {
 }
 
 const { issue } = Astro.props;
+const d = issue.data;
 const { Content } = await render(issue);
+
+// 関連課題は id → タイトルに解決して表示（未知のidはスキップ）
+const allIssues = await getCollection('issues');
+const titleById = new Map(allIssues.map((i) => [i.id, i.data.title]));
+const related = d.related
+  .filter((id) => titleById.has(id))
+  .map((id) => ({ id, title: titleById.get(id) }));
+
+const fmtDate = (date: Date) => date.toISOString().slice(0, 10);
 ---
 
-<BaseLayout title={issue.data.title} description={issue.data.description}>
+<BaseLayout title={d.title} description={d.description}>
   <article class="issue-body">
-    <p class="eyebrow">{issue.data.category} / {issue.data.subcategory}</p>
-    <h1>{issue.data.title}</h1>
-    <p class="lead">{issue.data.description}</p>
+    <p class="eyebrow">{d.category} / {d.subcategory}</p>
+    <h1>{d.title}</h1>
+    <p class="lead">{d.description}</p>
     <div class="meta">
-      <span class:list={["badge", issue.data.status !== 'published' && "draft"]}>{issue.data.status}</span>
-      <span class="badge">優先度: {issue.data.priority}</span>
-      <span class="badge">最終確認: {issue.data.last_reviewed.toISOString().slice(0, 10)}</span>
-      {issue.data.actors.map((actor) => <span class="badge">{actor}</span>)}
-      {issue.data.capital.map((capital) => <span class="badge">{capital}</span>)}
+      <span class:list={["badge", d.status !== 'published' && "draft"]}>{d.status}</span>
+      <span class="badge">優先度: {d.priority}</span>
+      <span class="badge">成熟度: {d.maturity}</span>
+      <span class="badge">最終確認: {fmtDate(d.last_reviewed)}</span>
+      {d.actors.map((actor) => <span class="badge">{actor}</span>)}
+      {d.capital.map((capital) => <span class="badge">{capital}</span>)}
     </div>
-    <Content />
-    <EvidenceBox sources={issue.data.sources} />
+
+    {/* Layer 1: すぐ読む概要 */}
+    {d.summary.length > 0 && (
+      <section class="summary-box" aria-label="30秒要約">
+        <h2>30秒要約</h2>
+        <ul>
+          {d.summary.map((point) => <li>{point}</li>)}
+        </ul>
+      </section>
+    )}
+
+    {/* Layer 2: 標準本文 */}
+    <div class="issue-content">
+      <Content />
+    </div>
+
+    {/* Layer 3: 詳細・根拠（折りたたみ） */}
+    <details class="detail-layer">
+      <summary>詳細・根拠を見る（出典・関連課題・更新履歴）</summary>
+      <EvidenceBox sources={d.sources} />
+      {related.length > 0 && (
+        <section class="related" aria-label="関連課題">
+          <h2>関連課題</h2>
+          <ul>
+            {related.map((r) => (
+              <li><a href={sitePath(`/issues/${r.id}`)}>{r.title}</a></li>
+            ))}
+          </ul>
+        </section>
+      )}
+      <section class="update-log" aria-label="更新履歴">
+        <h2>更新履歴</h2>
+        <p>
+          最終確認日: {fmtDate(d.last_reviewed)}
+          {d.next_review && <> ／ 次回確認予定: {d.next_review}</>}
+        </p>
+      </section>
+    </details>
   </article>
 </BaseLayout>

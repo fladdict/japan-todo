@@ -110,6 +110,30 @@ h3 { margin-top: 32px; }
   padding: clamp(20px, 5vw, 44px);
 }
 .issue-body :is(h2, h3) { scroll-margin-top: 24px; }
+.summary-box {
+  background: var(--accent-soft);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 18px 22px;
+  margin: 24px 0 8px;
+}
+.summary-box h2 { margin: 0 0 8px; font-size: 1.1rem; }
+.summary-box ul { margin: 0; padding-left: 1.1em; }
+.summary-box li { margin: 4px 0; }
+.detail-layer {
+  margin-top: 48px;
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+}
+.detail-layer > summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--accent);
+  list-style-position: inside;
+}
+.detail-layer[open] > summary { margin-bottom: 8px; }
+.detail-layer .sources { margin-top: 24px; }
+.related ul, .update-log p { margin-top: 8px; }
 .sources { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--line); }
 .callout { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 20px; }
 @media (max-width: 760px) {
