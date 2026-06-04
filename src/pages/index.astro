@@ -9,7 +9,7 @@ import { sitePath } from '../lib/url';
 const issues = (await getCollection('issues')).sort(
   (a, b) => b.data.last_reviewed.getTime() - a.data.last_reviewed.getTime(),
 );
-const featuredIssues = issues.slice(0, 6);
+const featuredIssues = issues;
 const issuesByCategory = (title: string) =>
   issues
     .filter((issue) => issue.data.category === title)
@@ -42,7 +42,7 @@ const issuesByCategory = (title: string) =>
   </section>
 
   <section>
-    <h2>最近更新された課題</h2>
+    <h2>すべての課題カード（最新更新順）</h2>
     <div class="grid">
       {featuredIssues.map((issue) => <IssueCard issue={issue} />)}
     </div>
