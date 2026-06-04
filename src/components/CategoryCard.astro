@@ -1,15 +1,31 @@
 ---
+import type { CollectionEntry } from 'astro:content';
 import { sitePath } from '../lib/url';
 
 interface Props {
   id: string;
   title: string;
   description: string;
+  issues?: CollectionEntry<'issues'>[];
 }
-const { id, title, description } = Astro.props;
+const { id, title, description, issues = [] } = Astro.props;
 ---
 
-<article class="card">
+<article class="card category-card">
   <h3><a href={sitePath(`/categories/${id}`)}>{title}</a></h3>
   <p>{description}</p>
+  {issues.length > 0 ? (
+    <ul class="category-issues">
+      {issues.map((issue) => (
+        <li>
+          <a href={sitePath(`/issues/${issue.id}`)}>{issue.data.title}</a>
+          {issue.data.status !== 'published' && (
+            <span class="badge draft">{issue.data.status}</span>
+          )}
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p class="category-empty">課題カードは準備中です。</p>
+  )}
 </article>

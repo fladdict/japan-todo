@@ -75,6 +75,24 @@ h3 { margin-top: 32px; }
   font-weight: 700;
 }
 .badge.draft { background: var(--danger-soft); color: #8a3d21; }
+.category-issues {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 14px 0 0;
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 8px;
+}
+.category-issues li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.category-issues a { font-weight: 600; text-decoration: none; }
+.category-issues a:hover { text-decoration: underline; }
+.category-issues .badge { font-size: 0.72rem; padding: 2px 8px; flex: none; }
+.category-empty { margin-top: 14px; font-size: 0.9rem; }
 .issue-list { list-style: none; padding: 0; display: grid; gap: 14px; }
 .issue-list li { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 18px; }
 .issue-list h3 { margin: 0 0 4px; }

@@ -10,6 +10,10 @@ const issues = (await getCollection('issues')).sort(
   (a, b) => b.data.last_reviewed.getTime() - a.data.last_reviewed.getTime(),
 );
 const featuredIssues = issues.slice(0, 6);
+const issuesByCategory = (title: string) =>
+  issues
+    .filter((issue) => issue.data.category === title)
+    .sort((a, b) => a.data.title.localeCompare(b.data.title, 'ja'));
 ---
 
 <BaseLayout>
@@ -31,7 +35,9 @@ const featuredIssues = issues.slice(0, 6);
   <section>
     <h2>8つの社会システム</h2>
     <div class="grid">
-      {categories.map((category) => <CategoryCard {...category} />)}
+      {categories.map((category) => (
+        <CategoryCard {...category} issues={issuesByCategory(category.title)} />
+      ))}
     </div>
   </section>
 
