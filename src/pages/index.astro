@@ -18,18 +18,12 @@ const issuesByCategory = (title: string) =>
 
 <BaseLayout>
   <section class="hero">
-    <div>
-      <p class="eyebrow">Public agenda for structural renewal</p>
-      <h1>日本が先送りせず解くべき課題</h1>
-      <p class="lead">
-        社会・政府・企業が向き合うべき構造課題を、出典つきの課題カードとして整理し、GitHub上で継続更新していくためのサイトです。
-      </p>
-    </div>
-    <aside class="callout">
-      <strong>このサイトの基本姿勢</strong>
-      <p>事実・解釈・提案を分ける。先送りコストを可視化する。政府・企業・自治体・個人の行動に接続する。</p>
-      <p><a href={sitePath('/issues')}>課題一覧を見る</a></p>
-    </aside>
+    <p class="eyebrow">出典つきの公共アジェンダ</p>
+    <h1>先送りせず、いま解くべき課題。</h1>
+    <p class="lead">
+      日本の社会・政府・企業が向き合うべき構造課題を、出典つきの課題カードとして継続的に整理します。
+    </p>
+    <p><a class="cta" href={sitePath('/issues')}>課題一覧を見る →</a></p>
   </section>
 
   <section>
