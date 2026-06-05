@@ -1,0 +1,103 @@
+---
+import { scaleLinear } from 'd3-scale';
+import { line as d3line } from 'd3-shape';
+import { CHART_DIMS, SERIES_COLORS, formatNum, type ChartSource, type LineSeries } from './chart';
+
+interface Props {
+  title?: string;
+  series?: LineSeries[];
+  data?: { x: number; y: number }[]; // 単一系列のショートカット
+  unit?: string;
+  yLabel?: string;
+  height?: number;
+  source: ChartSource;
+  note?: string;
+}
+const { title, series, data, unit = '', yLabel, height = CHART_DIMS.height, source, note } = Astro.props;
+
+const allSeries: LineSeries[] = series ?? (data ? [{ name: title ?? '', points: data }] : []);
+const W = CHART_DIMS.width;
+const H = height;
+const m = CHART_DIMS.margin;
+const innerW = W - m.left - m.right;
+const innerH = H - m.top - m.bottom;
+
+const xs = allSeries.flatMap((s) => s.points.map((p) => p.x));
+const ys = allSeries.flatMap((s) => s.points.map((p) => p.y));
+const xMin = Math.min(...xs);
+const xMax = Math.max(...xs);
+const yMax = Math.max(...ys, 0);
+const yMin = Math.min(...ys, 0);
+
+const x = scaleLinear().domain([xMin, xMax]).range([0, innerW]);
+const y = scaleLinear().domain([yMin, yMax]).nice().range([innerH, 0]);
+const yTicks = y.ticks(5);
+const xTickVals = allSeries[0]?.points.map((p) => p.x) ?? [];
+
+const mkLine = d3line<{ x: number; y: number }>()
+  .x((p) => x(p.x))
+  .y((p) => y(p.y));
+
+const multi = allSeries.length > 1;
+const summarize = (s: LineSeries) => {
+  const a = s.points[0];
+  const b = s.points[s.points.length - 1];
+  return `${s.name}: ${formatNum(a.y, unit)}（${a.x}）→ ${formatNum(b.y, unit)}（${b.x}）`;
+};
+const ariaLabel = `${title ?? '折れ線グラフ'}。${allSeries.map(summarize).join('、')}`;
+---
+
+<figure class="chart chart-line">
+  {title && <figcaption class="chart-title">{title}</figcaption>}
+  <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={ariaLabel} class="chart-svg">
+    <g transform={`translate(${m.left},${m.top})`}>
+      {/* y gridlines + labels */}
+      {yTicks.map((t) => (
+        <g>
+          <line x1={0} x2={innerW} y1={y(t)} y2={y(t)} class="chart-grid" />
+          <text x={-8} y={y(t)} dy="0.32em" text-anchor="end" class="chart-tick">{formatNum(t)}</text>
+        </g>
+      ))}
+      {/* x axis labels */}
+      {xTickVals.map((xv) => (
+        <text x={x(xv)} y={innerH + 22} text-anchor="middle" class="chart-tick">{xv}</text>
+      ))}
+      <line x1={0} x2={innerW} y1={innerH} y2={innerH} class="chart-axis" />
+      {/* lines + dots */}
+      {allSeries.map((s, i) => (
+        <g>
+          <path d={mkLine(s.points) ?? ''} fill="none" stroke={SERIES_COLORS[i % SERIES_COLORS.length]} stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" />
+          {s.points.map((p) => (
+            <circle cx={x(p.x)} cy={y(p.y)} r="3" fill={SERIES_COLORS[i % SERIES_COLORS.length]} />
+          ))}
+        </g>
+      ))}
+      {yLabel && <text transform={`translate(${-m.left + 14},${innerH / 2}) rotate(-90)`} text-anchor="middle" class="chart-axis-label">{yLabel}</text>}
+    </g>
+  </svg>
+
+  {multi && (
+    <ul class="chart-legend">
+      {allSeries.map((s, i) => (
+        <li><span class="chart-swatch" style={`background:${SERIES_COLORS[i % SERIES_COLORS.length]}`}></span>{s.name}</li>
+      ))}
+    </ul>
+  )}
+
+  <details class="chart-data">
+    <summary>データ表で見る</summary>
+    <table>
+      <thead><tr><th>項目</th>{xTickVals.map((xv) => <th>{xv}</th>)}</tr></thead>
+      <tbody>
+        {allSeries.map((s) => (
+          <tr><th>{s.name}{unit && `（${unit}）`}</th>{s.points.map((p) => <td>{formatNum(p.y)}</td>)}</tr>
+        ))}
+      </tbody>
+    </table>
+  </details>
+
+  <figcaption class="chart-source">
+    {note && <span class="chart-note">{note}</span>}
+    出典: <a href={source.url}>{source.title}</a>{source.publisher && <>（{source.publisher}{source.date && ` ${source.date}`}）</>}
+  </figcaption>
+</figure>

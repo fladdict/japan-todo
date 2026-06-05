@@ -105,6 +105,12 @@ components:
     background: primary-container
     color: on-primary-container
     radius: lg
+  chart:
+    background: surface-container-low
+    radius: lg
+    seriesColors: ["#2c6a4b", "#3a646f", "#9c6a2f", "#7a5a8e", "#b3623f", "#4f6356"]
+    rendering: build-time-svg
+    requires: source
 ---
 
 # japan-todo Design
@@ -160,6 +166,9 @@ Material 3 流に**影は控えめ**、階層は主にトーン差で表現す�
 - **Callout**: `secondary-container` のトーナルカード。
 - **Summary box（30秒要約）**: `primary-container` のトーナルカード（Layer1 を強調）。
 - **Details（詳細・根拠）**: outlined、サマリ行はボタン的に。
+- **Charts（`src/components/charts/`）**: LineChart（推移）/ BarChart（比較）/ StackedBarChart（内訳）。
+  ビルド時に**インラインSVG**へ描画（クライアントJSなし）。系列色は seriesColors を先頭から使用。
+  `<figure>` で囲み `<figcaption>` に**出典必須**、`<details>` にデータ表（a11y）。
 
 ## Do's and Don'ts
 

@@ -1,0 +1,94 @@
+---
+import { scaleBand, scaleLinear } from 'd3-scale';
+import { CHART_DIMS, SERIES_COLORS, formatNum, type ChartSource, type CategorySeries } from './chart';
+
+interface Props {
+  title?: string;
+  categories: string[];
+  series: CategorySeries[]; // 各系列を積み上げる
+  unit?: string;
+  yLabel?: string;
+  height?: number;
+  source: ChartSource;
+  note?: string;
+}
+const { title, categories, series, unit = '', yLabel, height = CHART_DIMS.height, source, note } = Astro.props;
+
+const W = CHART_DIMS.width;
+const H = height;
+const m = CHART_DIMS.margin;
+const innerW = W - m.left - m.right;
+const innerH = H - m.top - m.bottom;
+
+// カテゴリごとの合計（積み上げ最大）
+const totals = categories.map((_, ci) => series.reduce((sum, s) => sum + (s.values[ci] ?? 0), 0));
+const yMax = Math.max(...totals, 0);
+
+const x = scaleBand<string>().domain(categories).range([0, innerW]).padding(0.3);
+const y = scaleLinear().domain([0, yMax]).nice().range([innerH, 0]);
+const yTicks = y.ticks(5);
+
+// 各カテゴリの積み上げセグメント（下から）
+const stacksByCat = categories.map((_, ci) => {
+  let acc = 0;
+  return series.map((s) => {
+    const v = s.values[ci] ?? 0;
+    const seg = { name: s.name, v, y0: acc, y1: acc + v };
+    acc += v;
+    return seg;
+  });
+});
+
+const ariaLabel = `${title ?? '積み上げ棒グラフ'}。${categories
+  .map((c, ci) => `${c} 合計 ${formatNum(totals[ci], unit)}（${series.map((s) => `${s.name} ${formatNum(s.values[ci])}`).join('、')}）`)
+  .join('。')}`;
+---
+
+<figure class="chart chart-stacked">
+  {title && <figcaption class="chart-title">{title}</figcaption>}
+  <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={ariaLabel} class="chart-svg">
+    <g transform={`translate(${m.left},${m.top})`}>
+      {yTicks.map((t) => (
+        <g>
+          <line x1={0} x2={innerW} y1={y(t)} y2={y(t)} class="chart-grid" />
+          <text x={-8} y={y(t)} dy="0.32em" text-anchor="end" class="chart-tick">{formatNum(t)}</text>
+        </g>
+      ))}
+      <line x1={0} x2={innerW} y1={innerH} y2={innerH} class="chart-axis" />
+      {categories.map((c, ci) => (
+        <g transform={`translate(${x(c)},0)`}>
+          {stacksByCat[ci].map((seg, si) => (
+            <rect x={0} y={y(seg.y1)} width={x.bandwidth()} height={y(seg.y0) - y(seg.y1)} fill={SERIES_COLORS[si % SERIES_COLORS.length]} />
+          ))}
+          <text x={x.bandwidth() / 2} y={y(totals[ci]) - 6} text-anchor="middle" class="chart-value">{formatNum(totals[ci])}</text>
+          <text x={x.bandwidth() / 2} y={innerH + 22} text-anchor="middle" class="chart-tick">{c}</text>
+        </g>
+      ))}
+      {yLabel && <text transform={`translate(${-m.left + 14},${innerH / 2}) rotate(-90)`} text-anchor="middle" class="chart-axis-label">{yLabel}</text>}
+    </g>
+  </svg>
+
+  <ul class="chart-legend">
+    {series.map((s, i) => (
+      <li><span class="chart-swatch" style={`background:${SERIES_COLORS[i % SERIES_COLORS.length]}`}></span>{s.name}</li>
+    ))}
+  </ul>
+
+  <details class="chart-data">
+    <summary>データ表で見る</summary>
+    <table>
+      <thead><tr><th>内訳</th>{categories.map((c) => <th>{c}</th>)}</tr></thead>
+      <tbody>
+        {series.map((s) => (
+          <tr><th>{s.name}{unit && `（${unit}）`}</th>{s.values.map((v) => <td>{formatNum(v)}</td>)}</tr>
+        ))}
+        <tr><th>合計{unit && `（${unit}）`}</th>{totals.map((t) => <td>{formatNum(t)}</td>)}</tr>
+      </tbody>
+    </table>
+  </details>
+
+  <figcaption class="chart-source">
+    {note && <span class="chart-note">{note}</span>}
+    出典: <a href={source.url}>{source.title}</a>{source.publisher && <>（{source.publisher}{source.date && ` ${source.date}`}）</>}
+  </figcaption>
+</figure>
