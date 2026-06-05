@@ -30,11 +30,30 @@ sources:
     publisher: "富山市"
 ---
 
+import LineChart from '../../../components/charts/LineChart.astro';
+import BarChart from '../../../components/charts/BarChart.astro';
+
 ## 何が問題か
 
 高度成長期に整備されたインフラの多くが更新時期を迎えている。一方で、人口減少と財政制約により、すべてを同じ水準で維持することが難しくなっている。
 
 国土交通省の道路メンテナンス年報によると、建設後50年以上を経過した道路橋は、2018年度末の約13万橋（約27%）から2024年度末には約23万橋（約42%）へ増加し、10年後にはおよそ6割に達すると見込まれている。上下水道の耐震化も令和4年度末（2022年度末）時点で、基幹管路の耐震適合率が42.3%、浄水施設の耐震化率が43.4%、配水池が63.5%にとどまり、政府は依然として低い水準だとしている。
+
+<LineChart
+  title="建設後50年以上の道路橋の割合"
+  unit="%"
+  data={[{ x: 2018, y: 27 }, { x: 2024, y: 42 }, { x: 2034, y: 61 }]}
+  source={{ title: '道路メンテナンス年報', url: 'https://www.mlit.go.jp/report/press/road01_hh_001981.html', publisher: '国土交通省', date: '2025' }}
+  note="2034年は推計（約6割）。"
+/>
+
+<BarChart
+  title="上下水道の耐震化の状況（令和4年度末）"
+  unit="%"
+  categories={['基幹管路の耐震適合率', '浄水施設の耐震化率', '配水池の耐震化率']}
+  series={[{ name: '令和4年度末', values: [42.3, 43.4, 63.5] }]}
+  source={{ title: '水道の耐震化の状況（令和4年度）', url: 'https://www.mhlw.go.jp/content/10908000/001228272.pdf', publisher: '厚生労働省', date: '2024' }}
+/>
 
 ## なぜ先送りされてきたか
 
