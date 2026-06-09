@@ -1,0 +1,62 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { categories } from '../data/categories';
+import { sitePath } from '../lib/url';
+
+const issues = await getCollection('issues');
+const byId = new Map(issues.map((i) => [i.id, i]));
+
+// 被リンク（双方向）を集計
+const backlinks = new Map<string, string[]>();
+for (const i of issues) {
+  for (const r of i.data.related) {
+    if (!backlinks.has(r)) backlinks.set(r, []);
+    backlinks.get(r)!.push(i.id);
+  }
+}
+const relatedOf = (id: string, ownRelated: string[]) =>
+  [...new Set([...ownRelated, ...(backlinks.get(id) ?? [])])].filter((r) => byId.has(r) && r !== id);
+
+const byCategory = (title: string) =>
+  issues
+    .filter((i) => i.data.category === title)
+    .sort((a, b) => b.data.urgency - a.data.urgency || b.data.severity - a.data.severity);
+---
+
+<BaseLayout title="課題マップ" description="日本の構造課題を分類・緊急度・関連でたどる地図。">
+  <h1>課題マップ</h1>
+  <p class="lead">
+    8分類・{issues.length}件の課題を、緊急度の高い順に並べ、関連する課題でつないでいます。気になる入口から、つながりをたどってください。
+  </p>
+
+  {categories.map((category) => {
+    const items = byCategory(category.title);
+    if (items.length === 0) return null;
+    return (
+      <section class="map-cat">
+        <h2><a href={sitePath(`/categories/${category.id}`)}>{category.title}</a> <span class="map-count">{items.length}</span></h2>
+        <ul class="map-list">
+          {items.map((i) => {
+            const rel = relatedOf(i.id, i.data.related);
+            return (
+              <li class="map-node">
+                <div class="map-node-head">
+                  <a class="map-node-title" href={sitePath(`/issues/${i.id}`)}>{i.data.title}</a>
+                  <span class="map-ratings" aria-label={`緊急度${i.data.urgency}・深刻度${i.data.severity}`}>緊{i.data.urgency}・深{i.data.severity}</span>
+                </div>
+                {rel.length > 0 && (
+                  <div class="map-rel">
+                    {rel.map((r) => (
+                      <a class="map-rel-chip" href={sitePath(`/issues/${r}`)}>{byId.get(r)!.data.title}</a>
+                    ))}
+                  </div>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+    );
+  })}
+</BaseLayout>

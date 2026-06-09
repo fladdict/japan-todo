@@ -17,11 +17,14 @@ const { issue } = Astro.props;
 const d = issue.data;
 const { Content } = await render(issue);
 
-// 関連課題は id → タイトルに解決して表示（未知のidはスキップ）
+// 関連課題は id → タイトルに解決して表示（双方向：被リンクも含める）
 const allIssues = await getCollection('issues');
 const titleById = new Map(allIssues.map((i) => [i.id, i.data.title]));
-const related = d.related
-  .filter((id) => titleById.has(id))
+const backlinks = allIssues
+  .filter((i) => i.data.related.includes(issue.id))
+  .map((i) => i.id);
+const related = [...new Set([...d.related, ...backlinks])]
+  .filter((id) => titleById.has(id) && id !== issue.id)
   .map((id) => ({ id, title: titleById.get(id) }));
 
 const fmtDate = (date: Date) => date.toISOString().slice(0, 10);
@@ -57,6 +60,13 @@ const citation = `japan-todo「${d.title}」最終確認 ${fmtDate(d.last_review
       {d.actors.map((actor) => <span class="badge">{actor}</span>)}
       {d.capital.map((capital) => <span class="badge">{capital}</span>)}
     </div>
+    {d.tags.length > 0 && (
+      <div class="meta" aria-label="タグ">
+        {d.tags.map((tag) => (
+          <a class="badge tag-link" href={sitePath(`/tags/${encodeURIComponent(tag)}`)}>#{tag}</a>
+        ))}
+      </div>
+    )}
 
     {/* Layer 1: すぐ読む概要 */}
     {(d.essence || d.summary.length > 0) && (

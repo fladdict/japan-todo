@@ -1,0 +1,65 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { sitePath } from '../lib/url';
+
+const issues = await getCollection('issues');
+
+// 出典をURLで集約し、参照しているカードを束ねる
+type Agg = {
+  title: string;
+  url: string;
+  publisher?: string;
+  date?: string;
+  volatile?: boolean;
+  cards: { id: string; title: string }[];
+};
+const byUrl = new Map<string, Agg>();
+for (const issue of issues) {
+  for (const s of issue.data.sources) {
+    if (!byUrl.has(s.url)) {
+      byUrl.set(s.url, { title: s.title, url: s.url, publisher: s.publisher, date: s.date, volatile: s.volatile, cards: [] });
+    }
+    const a = byUrl.get(s.url)!;
+    if (s.volatile) a.volatile = true;
+    a.cards.push({ id: issue.id, title: issue.data.title });
+  }
+}
+const byPublisher = new Map<string, Agg[]>();
+for (const a of byUrl.values()) {
+  const pub = a.publisher ?? 'その他';
+  if (!byPublisher.has(pub)) byPublisher.set(pub, []);
+  byPublisher.get(pub)!.push(a);
+}
+const publishers = [...byPublisher.entries()].sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0], 'ja'));
+const totalSources = byUrl.size;
+---
+
+<BaseLayout title="出典・データ集" description="全課題カードが参照する一次情報・統計・出典を発行主体ごとに集約。">
+  <h1>出典・データ集</h1>
+  <p class="lead">
+    全{issues.length}課題が参照する一次情報・公的統計・出典を、発行主体ごとに集約しました（{totalSources}件）。「更新で変動しうる数値」には鮮度バッジを付けています。
+  </p>
+
+  {publishers.map(([pub, list]) => (
+    <section class="src-group">
+      <h2>{pub} <span class="src-count">{list.length}</span></h2>
+      <ol class="src-aggr">
+        {list
+          .sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''))
+          .map((a) => (
+            <li>
+              <a href={a.url}>{a.title}</a>
+              {a.date && <>（{a.date}）</>}
+              {a.volatile && <span class="src-badge">更新で変動しうる数値</span>}
+              <span class="src-cards">
+                {a.cards.map((c, i) => (
+                  <>{i > 0 && '・'}<a href={sitePath(`/issues/${c.id}`)}>{c.title}</a></>
+                ))}
+              </span>
+            </li>
+          ))}
+      </ol>
+    </section>
+  ))}
+</BaseLayout>

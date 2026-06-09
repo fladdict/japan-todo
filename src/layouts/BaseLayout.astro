@@ -35,6 +35,8 @@ const pageTitle = title === '日本が先送りせず解くべき課題' ? title
       <nav aria-label="Main navigation">
         <a href={sitePath('/')}>ホーム</a>
         <a href={sitePath('/issues')}>課題一覧</a>
+        <a href={sitePath('/map')}>課題マップ</a>
+        <a href={sitePath('/sources')}>出典・データ</a>
         <a href={sitePath('/about')}>このサイトについて</a>
       </nav>
     </header>
@@ -43,6 +45,9 @@ const pageTitle = title === '日本が先送りせず解くべき課題' ? title
     </main>
     <footer class="site-footer">
       <p>事実・解釈・提案を分け、出典と更新履歴を残しながら育てるオープンな課題地図です。</p>
+      <p class="footer-links">
+        <a href={sitePath('/map')}>課題マップ</a>・<a href={sitePath('/tags')}>タグ一覧</a>・<a href={sitePath('/sources')}>出典・データ集</a>
+      </p>
     </footer>
   </body>
 </html>

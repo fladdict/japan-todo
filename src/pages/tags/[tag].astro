@@ -1,0 +1,29 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import IssueCard from '../../components/IssueCard.astro';
+
+export async function getStaticPaths() {
+  const issues = await getCollection('issues');
+  const map = new Map<string, typeof issues>();
+  for (const issue of issues) {
+    for (const tag of issue.data.tags) {
+      if (!map.has(tag)) map.set(tag, []);
+      map.get(tag)!.push(issue);
+    }
+  }
+  return [...map.entries()].map(([tag, items]) => ({ params: { tag }, props: { tag, items } }));
+}
+
+const { tag, items } = Astro.props;
+const sorted = items.sort((a, b) => a.data.title.localeCompare(b.data.title, 'ja'));
+---
+
+<BaseLayout title={`タグ: ${tag}`} description={`「${tag}」に関連する課題カード`}>
+  <p class="eyebrow">タグ</p>
+  <h1>#{tag}</h1>
+  <p class="lead">「{tag}」に関連する課題カード（{items.length}件）。</p>
+  <div class="grid">
+    {sorted.map((issue) => <IssueCard issue={issue} />)}
+  </div>
+</BaseLayout>

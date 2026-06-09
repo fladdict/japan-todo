@@ -690,6 +690,77 @@ nav a:hover {
   margin-bottom: 2px;
 }
 
+/* --- 課題マップ --- */
+.map-cat { margin-top: var(--space-xl); }
+.map-cat h2 { margin-bottom: var(--space-sm); }
+.map-count {
+  font-size: 0.8rem;
+  color: var(--on-surface-variant);
+  background: var(--surface-container-high);
+  border-radius: var(--radius-full);
+  padding: 1px 9px;
+  vertical-align: middle;
+}
+.map-list { list-style: none; padding: 0; display: grid; gap: var(--space-xs); }
+.map-node {
+  background: var(--surface-container-lowest);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
+}
+.map-node-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-sm); }
+.map-node-title { font-weight: 700; color: var(--on-surface); }
+.map-ratings { flex: none; font-size: 0.74rem; color: var(--on-surface-variant); white-space: nowrap; }
+.map-rel { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 6px; }
+.map-rel-chip {
+  font-size: 0.74rem;
+  background: var(--surface-container);
+  color: var(--on-surface-variant);
+  border-radius: var(--radius-full);
+  padding: 2px 10px;
+  text-decoration: none;
+}
+.map-rel-chip:hover { background: var(--state-hover); text-decoration: none; }
+
+/* --- タグ --- */
+.tag-cloud { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface-container-high);
+  color: var(--on-surface-variant);
+  border-radius: var(--radius-full);
+  padding: 6px 14px;
+  text-decoration: none;
+  font-weight: 600;
+}
+.tag-chip:hover { background: var(--state-hover); text-decoration: none; }
+.tag-n { font-size: 0.78rem; opacity: 0.7; }
+.tag-link { text-decoration: none; }
+.tag-link:hover { background: var(--state-hover); text-decoration: none; }
+
+/* --- 出典・データ集 --- */
+.src-group { margin-top: var(--space-xl); }
+.src-count {
+  font-size: 0.8rem; color: var(--on-surface-variant);
+  background: var(--surface-container-high); border-radius: var(--radius-full); padding: 1px 9px;
+}
+.src-aggr { padding-left: 1.2em; display: grid; gap: var(--space-sm); }
+.src-aggr li { line-height: 1.6; }
+.src-cards { display: block; font-size: 0.82rem; color: var(--on-surface-variant); margin-top: 2px; }
+.footer-links { margin-top: var(--space-xs); }
+
+/* --- 印刷（PDF保存） --- */
+@media print {
+  :root { --surface: #fff; }
+  .site-header, .site-footer, .cta, .chart-data { display: none !important; }
+  a { color: #000; text-decoration: underline; }
+  .issue-body, .card, .chart, .summary-box, .policy-summary { border: 1px solid #ccc; box-shadow: none; break-inside: avoid; }
+  main { width: 100%; padding: 0; }
+  .summary-box, .policy-summary { background: #f3f3f3 !important; color: #000 !important; }
+}
+
 @media (max-width: 760px) {
   .hero {
     grid-template-columns: 1fr;
