@@ -45,7 +45,9 @@ L3 draft-issue（速）→ enrich-issue（深）   カード本文を書く
 - **年金の持続可能性**: OECD が支給開始年齢の引上げに言及。→ governance 候補（fiscal-sustainability / generational-equity との重複に注意）。
 - **偽情報・社会の分断**: WEF 短期リスク上位。→ `digital/disinformation` の優先度見直し（緊3→4 を提案）。
 
-**分類タクソノミー**: 8分類は維持でよい。経済安全保障・外国人材は既存分類（industry / trust・human-capital）＋ `related` で扱う。
+**分類タクソノミー**: この時点では8分類維持＋横断 `related` 案だったが、2026-06-09 の L1 拡張で
+経済安全保障を含む対外的安全課題を独立分類「外交・安全保障（security）」へ格上げした（後述）。外国人材は
+引き続き既存分類（trust・human-capital）＋ `related` で扱う。
 
 **次に L2/L3 を回す優先レーン**: ① population（少子化・高齢化=緊5/深5）② governance（財政=緊4/深5）③ environment（防災=緊4/深5）。
 
@@ -56,6 +58,24 @@ L3 draft-issue（速）→ enrich-issue（深）   カード本文を書く
 出典URLを WebFetch で実在確認（計176件）、「要追記」の良い事例を公式ページで裏取りして実例化
 （自治体・NPO・海外事例を含む）、旧11見出しの5枚を12節へ移行。**全32枚が status: review に到達**。
 ※これは standard 水準（単一エージェント検証）。最重要カードは今後 deep-research（3票）でさらに固める余地あり。
+
+---
+
+## L1 分類拡張（2026-06-09 実施）
+
+**9番目の分類「外交・安全保障（security）」を新設。** 従来は「経済安全保障・地経学的対立」を
+industry の `related` で扱う方針だったが、防衛力・抑止力・同盟・外交・経済安保が相互に密接で、
+かつ対外的な「安全と自律性」という独立した存立軸を成すため、横断 `related` では収まらないと判断し
+独立分類へ格上げ。`src/data/categories.ts` に `security`（外交・安全保障）を追加。
+
+**カード4枚を新設・本文化（draft-issues → enrich-issues）**:
+- `draft-issues`（2026-06-09）: 4枚を12節 draft 本文化。
+- `enrich-issues`（2026-06-09）: defense-capability / economic-security を standard・review へ、
+  続いて diplomacy / alliance-deterrence を standard・review へ昇格（出典を WebFetch 実在確認、
+  良い事例を公式ページで裏取りして実例化＝海外事例含む）。
+- **全36枚が status: review に到達。** verify エラー0 / check 0 errors / build 156ページ。
+※これも standard 水準（単一エージェント検証）。重要4枚（特に economic-security・defense-capability）は
+今後 deep-research（3票）で固める余地あり。economic-security は数値の厚みが薄め（22数値）で要拡充。
 
 ---
 
@@ -119,7 +139,8 @@ L3 draft-issue（速）→ enrich-issue（深）   カード本文を書く
 | startups | スタートアップの育成 | 3 | 3 | 内容 |
 | corporate-governance | コーポレートガバナンスと人的資本経営 | 2 | 2 | 内容 |
 
-- 候補: **経済安全保障・サプライチェーン強靱化（★格上げ：WEF 2026 短期リスク1位。digital/cybersecurity・environment/energy-security と related）**、研究開発と大学（基礎研究力。★OECD が大学-SME連携・R&D税制に言及）
+- 候補: 研究開発と大学（基礎研究力。★OECD が大学-SME連携・R&D税制に言及）
+- ~~経済安全保障・サプライチェーン強靱化~~ → **新設分類 security/economic-security へ移設（2026-06-09）**。industry とは `related` で結ぶ。
 
 ## 環境・エネルギー・防災（environment）
 
@@ -154,6 +175,22 @@ L3 draft-issue（速）→ enrich-issue（深）   カード本文を書く
 
 - 候補: **外国人材・多文化共生（★格上げ：外国人労働者 約205万人=全雇用者の約3.4%、2025年に専管組織設置。human-capital/population と related）**、ジェンダー平等
 
+## 外交・安全保障（security）
+
+| slug | タイトル | 緊 | 深 | 状態 |
+|---|---|:--:|:--:|---|
+| defense-capability | 防衛力の強化と安全保障環境 | 4 | 4 | 内容 |
+| economic-security | 経済安全保障 | 4 | 4 | 内容 |
+| alliance-deterrence | 日米同盟と抑止力 | 3 | 4 | 内容 |
+| diplomacy | 外交力と多国間連携 | 3 | 3 | 内容 |
+
+**L2 点検（2026-06-09）**: 新設分類の初期スコープ（防衛力・経済安保・同盟/抑止・外交）を4枚でカバー。
+非党派・中立を厳守し、特定政権・政党の評価や個別装備調達の是非は扱わず、公式文書（防衛白書・外交青書・
+2+2 等）の事実に即して構成。
+- 候補: **サイバー・宇宙・電磁波など新領域**（digital/cybersecurity と related で扱うか独立カード化かを要判断）、
+  **情報戦・認知領域**（digital/disinformation と related）、**防衛産業・装備移転の基盤**。
+- 粒度ゲート: 個別装備・個別法案は候補にしない。経済安保は industry/digital と `related` で結ぶ。
+
 ---
 
 ## 横断課題（cross-cutting）
@@ -164,6 +201,8 @@ L3 draft-issue（速）→ enrich-issue（深）   カード本文を書く
 - **外国人材・多文化共生**: 人口 × 人的資本 × 民主主義・共生
 - **ジェンダー平等**: 人的資本 × 人口 × 共生
 - **データ・DX**: デジタル × 行政 × 医療・教育
+- **経済安全保障**: 外交・安全保障 × 産業 × デジタル（security/economic-security を軸に industry/digital と related）
+- **サイバー・情報空間**: 外交・安全保障 × デジタル（security と digital/cybersecurity・disinformation を related で結ぶ）
 
 ## 要再確認（鮮度）— 点検日 2026-06-05
 
@@ -176,6 +215,9 @@ L3 draft-issue（速）→ enrich-issue（深）   カード本文を書く
 
 ## 分類タクソノミーの見直しメモ（L1）
 
-- 現状の8分類は概ね妥当。
-- 収まりが悪い横断テーマ（外国人・移民、ジェンダー、経済安全保障）は、独立カード＋`related` で扱うか、
+- 現状は**9分類**（2026-06-09 に「外交・安全保障（security）」を追加）。
+- 経済安全保障は security へ移し、industry/digital とは `related` で結ぶ方針に変更。
+- 収まりが悪い横断テーマ（外国人・移民、ジェンダー）は、独立カード＋`related` で扱うか、
   既存分類に寄せるかを global 実行時に判断する。
+- 次の分割候補: security 内の**新領域（サイバー・宇宙・電磁波）**を独立カード化するか、
+  digital/cybersecurity との重複を避けて `related` で結ぶかを次回 L1 で精査。
