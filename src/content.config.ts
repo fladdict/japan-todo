@@ -21,8 +21,22 @@ const issues = defineCollection({
     urgency: z.number().int().min(1).max(5).default(3),
     // 深刻度: 放置した場合の被害の大きさ・存立への影響（5=社会の存立に関わる … 1=改善が望ましいが致命的でない）
     severity: z.number().int().min(1).max(5).default(3),
+    // この課題の本質（一文・Layer1冒頭）。description とは別に核を1文で。
+    essence: z.string().optional(),
     // 30秒要約（Layer 1）: 何が問題か / なぜ今か / 最初にやるべきこと など3点前後
     summary: z.array(z.string()).default([]),
+    // 政策判断サマリー（Layer1）: 意思決定者が一瞬で使う6項目。standard以上で推奨、未入力なら非表示。
+    policy_summary: z
+      .object({
+        now: z.string(), // いま何が問題か
+        why_now: z.string(), // なぜ今か
+        constraint: z.string(), // 最大の制約
+        levers: z.array(z.string()).default([]), // 政策レバー
+        kpi: z.string(), // 最重要KPI
+        contention: z.string(), // 政治的争点
+      })
+      .partial()
+      .optional(),
     // 関連課題: 他カードの id（例: "population/low-birthrate"）
     related: z.array(z.string()).default([]),
     time_horizon: z.array(z.string()).default([]),
@@ -37,7 +51,10 @@ const issues = defineCollection({
           title: z.string(),
           url: z.string().url(),
           publisher: z.string().optional(),
-          date: z.string().optional(),
+          date: z.string().optional(), // 公表年/時点
+          accessed: z.string().optional(), // 最終確認日
+          locator: z.string().optional(), // 該当箇所（表番号・ページ・節）
+          volatile: z.boolean().optional(), // 更新で変動しうる数値か
         }),
       )
       .default([]),

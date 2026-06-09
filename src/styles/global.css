@@ -477,6 +477,116 @@ nav a:hover {
   margin: var(--space-xs) 0;
 }
 
+/* --- Essence (本質一文) --- */
+.summary-box .essence {
+  margin: 0 0 var(--space-sm);
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+.summary-box .essence + h2 {
+  margin-top: var(--space-sm);
+  border-top: 1px solid color-mix(in srgb, var(--on-primary-container) 18%, transparent);
+  padding-top: var(--space-sm);
+}
+
+/* --- 政策判断サマリー --- */
+.policy-summary {
+  background: var(--secondary-container);
+  color: var(--on-secondary-container);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md) var(--space-lg);
+  margin: var(--space-sm) 0 var(--space-md);
+}
+.policy-summary > strong {
+  display: block;
+  margin-bottom: var(--space-xs);
+  font-size: 1.02rem;
+}
+.policy-summary dl {
+  margin: 0;
+  display: grid;
+  gap: 6px 16px;
+}
+.policy-summary .ps-row {
+  display: grid;
+  grid-template-columns: 8.5em 1fr;
+  gap: 8px;
+}
+.policy-summary dt {
+  font-weight: 700;
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+.policy-summary dd {
+  margin: 0;
+}
+@media (max-width: 560px) {
+  .policy-summary .ps-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+
+/* --- 政策選択肢の比較表 --- */
+.options-table {
+  margin: var(--space-lg) 0;
+}
+.options-table > figcaption {
+  font-weight: 700;
+  margin-bottom: var(--space-xs);
+}
+.options-scroll {
+  overflow-x: auto;
+}
+.options-table table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.9rem;
+}
+.options-table th,
+.options-table td {
+  border: 1px solid var(--outline-variant);
+  padding: 8px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+.options-table thead th {
+  background: var(--surface-container-high);
+  white-space: nowrap;
+}
+.options-table tbody th {
+  background: var(--surface-container);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* --- 出典の鮮度・該当箇所 --- */
+.src-locator { color: var(--on-surface-variant); }
+.src-accessed { color: var(--on-surface-variant); font-size: 0.85em; }
+.src-badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 8px;
+  border-radius: var(--radius-full);
+  background: var(--error-container);
+  color: var(--on-error-container);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+/* --- このページを引用 --- */
+.cite-box { margin-top: var(--space-lg); }
+.cite-text {
+  background: var(--surface-container);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-size: 0.85rem;
+  word-break: break-all;
+  user-select: all;
+}
+
 /* --- Charts --- */
 .chart {
   margin: var(--space-lg) 0;

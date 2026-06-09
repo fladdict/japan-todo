@@ -1,0 +1,47 @@
+---
+// 政策選択肢の比較表（静的HTMLテーブル・クライアントJSなし）。
+// 出典のある定量のみ。無ければ定性＋「要確認」を書く（捏造禁止）。
+interface Option {
+  name: string; // 選択肢
+  effect?: string; // 効果
+  cost?: string; // コスト
+  feasibility?: string; // 実現難度
+  sideEffects?: string; // 主な副作用
+  note?: string; // 前提・備考
+}
+interface Props {
+  caption?: string;
+  options: Option[];
+}
+const { caption = '政策選択肢の比較', options } = Astro.props;
+---
+
+<figure class="options-table">
+  <figcaption>{caption}</figcaption>
+  <div class="options-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">選択肢</th>
+          <th scope="col">効果</th>
+          <th scope="col">コスト</th>
+          <th scope="col">実現難度</th>
+          <th scope="col">主な副作用</th>
+          <th scope="col">前提・備考</th>
+        </tr>
+      </thead>
+      <tbody>
+        {options.map((o) => (
+          <tr>
+            <th scope="row">{o.name}</th>
+            <td>{o.effect ?? '—'}</td>
+            <td>{o.cost ?? '—'}</td>
+            <td>{o.feasibility ?? '—'}</td>
+            <td>{o.sideEffects ?? '—'}</td>
+            <td>{o.note ?? '—'}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</figure>

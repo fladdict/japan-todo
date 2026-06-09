@@ -4,6 +4,9 @@ interface Source {
   url: string;
   publisher?: string;
   date?: string;
+  accessed?: string;
+  locator?: string;
+  volatile?: boolean;
 }
 interface Props {
   sources: Source[];
@@ -22,6 +25,9 @@ const { sources } = Astro.props;
           <a href={source.url}>{source.title}</a>
           {source.publisher && <> — {source.publisher}</>}
           {source.date && <>（{source.date}）</>}
+          {source.locator && <span class="src-locator"> ／ {source.locator}</span>}
+          {source.volatile && <span class="src-badge">更新で変動しうる数値</span>}
+          {source.accessed && <span class="src-accessed"> 最終確認 {source.accessed}</span>}
         </li>
       ))}
     </ol>

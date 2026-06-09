@@ -169,6 +169,13 @@ Material 3 流に**影は控えめ**、階層は主にトーン差で表現す�
 - **Charts（`src/components/charts/`）**: LineChart（推移）/ BarChart（比較）/ StackedBarChart（内訳）。
   ビルド時に**インラインSVG**へ描画（クライアントJSなし）。系列色は seriesColors を先頭から使用。
   `<figure>` で囲み `<figcaption>` に**出典必須**、`<details>` にデータ表（a11y）。
+- **本質一文（essence）**: Layer1 要約ボックス冒頭に大きめ太字で1文。意思決定者の認知を一段上げる。
+- **政策判断サマリー（policy_summary）**: secondary-container の callout に6項目（いま何が問題か/なぜ今か/最大の制約/
+  政策レバー/最重要KPI/政治的争点）を定義リストで。standard以上で表示。
+- **OptionsTable（`src/components/OptionsTable.astro`）**: 政策選択肢の比較。静的HTMLテーブル（選択肢/効果/
+  コスト/実現難度/主な副作用/前提）。定量は出典つきのみ。
+- **出典の鮮度**: `volatile` な数値は EvidenceBox に「更新で変動しうる数値」バッジ＋`accessed`（最終確認日）。
+- **このページを引用**: Layer3 末尾に引用テキストを自動生成（title/最終確認日/URL）。
 
 ## Do's and Don'ts
 

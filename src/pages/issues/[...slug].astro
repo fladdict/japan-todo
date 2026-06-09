@@ -25,6 +25,22 @@ const related = d.related
   .map((id) => ({ id, title: titleById.get(id) }));
 
 const fmtDate = (date: Date) => date.toISOString().slice(0, 10);
+
+const pageUrl = Astro.site
+  ? new URL(sitePath(`/issues/${issue.id}`), Astro.site).href
+  : sitePath(`/issues/${issue.id}`);
+const ps = d.policy_summary;
+const psRows: [string, string][] = ps
+  ? ([
+      ['いま何が問題か', ps.now],
+      ['なぜ今か', ps.why_now],
+      ['最大の制約', ps.constraint],
+      ['政策レバー', ps.levers && ps.levers.length ? ps.levers.join('、') : undefined],
+      ['最重要KPI', ps.kpi],
+      ['政治的争点', ps.contention],
+    ].filter((row): row is [string, string] => Boolean(row[1])))
+  : [];
+const citation = `japan-todo「${d.title}」最終確認 ${fmtDate(d.last_reviewed)}, ${pageUrl}`;
 ---
 
 <BaseLayout title={d.title} description={d.description}>
@@ -43,12 +59,32 @@ const fmtDate = (date: Date) => date.toISOString().slice(0, 10);
     </div>
 
     {/* Layer 1: すぐ読む概要 */}
-    {d.summary.length > 0 && (
-      <section class="summary-box" aria-label="30秒要約">
-        <h2>30秒要約</h2>
-        <ul>
-          {d.summary.map((point) => <li>{point}</li>)}
-        </ul>
+    {(d.essence || d.summary.length > 0) && (
+      <section class="summary-box" aria-label="要約">
+        {d.essence && <p class="essence">{d.essence}</p>}
+        {d.summary.length > 0 && (
+          <>
+            <h2>30秒要約</h2>
+            <ul>
+              {d.summary.map((point) => <li>{point}</li>)}
+            </ul>
+          </>
+        )}
+      </section>
+    )}
+
+    {/* Layer 1: 政策判断サマリー（意思決定者向け6項目） */}
+    {psRows.length > 0 && (
+      <section class="policy-summary" aria-label="政策判断サマリー">
+        <strong>政策判断サマリー</strong>
+        <dl>
+          {psRows.map(([k, v]) => (
+            <div class="ps-row">
+              <dt>{k}</dt>
+              <dd>{v}</dd>
+            </div>
+          ))}
+        </dl>
       </section>
     )}
 
@@ -77,6 +113,10 @@ const fmtDate = (date: Date) => date.toISOString().slice(0, 10);
           最終確認日: {fmtDate(d.last_reviewed)}
           {d.next_review && <> ／ 次回確認予定: {d.next_review}</>}
         </p>
+      </section>
+      <section class="cite-box" aria-label="このページを引用">
+        <h2>このページを引用</h2>
+        <p class="cite-text">{citation}</p>
       </section>
     </details>
   </article>
