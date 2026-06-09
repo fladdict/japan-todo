@@ -28,7 +28,7 @@ const byCategory = (title: string) =>
 <BaseLayout title="課題マップ" description="日本の構造課題を分類・緊急度・関連でたどる地図。">
   <h1>課題マップ</h1>
   <p class="lead">
-    8分類・{issues.length}件の課題を、緊急度の高い順に並べ、関連する課題でつないでいます。気になる入口から、つながりをたどってください。
+    {categories.length}分類・{issues.length}件の課題を、緊急度の高い順に並べ、関連する課題でつないでいます。気になる入口から、つながりをたどってください。
   </p>
 
   <IssueGraph />

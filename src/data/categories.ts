@@ -39,6 +39,11 @@ export const categories = [
     title: '民主主義・信頼・共生',
     description: '政治参加、透明性、人権、孤独・孤立、合意形成に関わる課題。',
   },
+  {
+    id: 'security',
+    title: '外交・安全保障',
+    description: '防衛力、抑止力、日米同盟、外交、経済安全保障、サイバー・宇宙など新領域に関わる、対外的な安全と自律性の課題。',
+  },
 ] as const;
 
 export type CategoryId = (typeof categories)[number]['id'];

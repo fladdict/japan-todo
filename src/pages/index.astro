@@ -27,7 +27,7 @@ const issuesByCategory = (title: string) =>
   </section>
 
   <section>
-    <h2>8つの社会システム</h2>
+    <h2>{categories.length}つの社会システム</h2>
     <div class="grid">
       {categories.map((category) => (
         <CategoryCard {...category} issues={issuesByCategory(category.title)} />
