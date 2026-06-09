@@ -66,7 +66,8 @@
   --e2: 0 2px 4px rgba(0, 0, 0, 0.07), 0 6px 12px rgba(0, 0, 0, 0.10);
 
   /* --- Type --- */
-  --font-sans: 'Noto Sans JP', system-ui, -apple-system, BlinkMacSystemFont,
+  /* ラテン/数字=Inter、和文=Noto Sans JP のモダン・ペアリング */
+  --font-sans: 'Inter', 'Noto Sans JP', system-ui, -apple-system, BlinkMacSystemFont,
     'Hiragino Sans', 'Yu Gothic UI', sans-serif;
 
   --content-width: min(1120px, calc(100% - 32px));
@@ -86,10 +87,14 @@ body {
   margin: 0;
   background: var(--surface);
   color: var(--on-surface);
-  line-height: 1.85;
+  line-height: 1.8;
+  letter-spacing: 0.02em;
+  font-feature-settings: 'palt' 1; /* 和文プロポーショナル（モダンJPタイポ） */
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  font-variant-numeric: tabular-nums; /* 数字を等幅で揃える（データ志向） */
 }
+p { text-wrap: pretty; }
 
 a {
   color: var(--primary);
@@ -113,26 +118,31 @@ main {
   padding: var(--space-xl) 0 var(--space-xxl);
 }
 
-/* --- Type scale --- */
+/* --- Type scale（Material 3 寄り・モダンタイポ）--- */
 h1 {
-  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  font-size: clamp(2rem, 4.4vw, 2.9rem);
   font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: -0.01em;
+  line-height: 1.22;
+  letter-spacing: -0.02em;
   margin: var(--space-xs) 0 var(--space-md);
+  text-wrap: balance;
 }
 h2 {
-  font-size: clamp(1.2rem, 2.2vw, 1.45rem);
+  font-size: clamp(1.35rem, 2.6vw, 1.7rem);
   font-weight: 700;
   line-height: 1.35;
+  letter-spacing: -0.01em;
   margin-top: var(--space-xl);
   margin-bottom: var(--space-md);
+  text-wrap: balance;
 }
 h3 {
-  font-size: 1.2rem;
+  font-size: 1.18rem;
   font-weight: 700;
-  line-height: 1.4;
+  line-height: 1.45;
+  letter-spacing: -0.005em;
   margin-top: var(--space-xl);
+  text-wrap: balance;
 }
 .eyebrow {
   color: var(--primary);
@@ -240,8 +250,9 @@ nav a:hover {
   border-color: color-mix(in srgb, var(--outline-variant) 60%, var(--primary));
 }
 .card h3 {
-  margin: 0 0 var(--space-xs);
-  font-size: 1.18rem;
+  margin: 0 0 6px;
+  font-size: 1.1rem;
+  line-height: 1.45;
 }
 .card h3 a {
   color: var(--on-surface);
@@ -252,6 +263,8 @@ nav a:hover {
 .card p {
   margin: 0;
   color: var(--on-surface-variant);
+  font-size: 0.95rem;
+  line-height: 1.75;
 }
 
 /* --- Chips / Badges --- */
@@ -399,19 +412,27 @@ nav a:hover {
 .issue-body :is(h2, h3) {
   scroll-margin-top: 80px;
 }
+/* 長文の measure（1行の長さ）を読みやすい幅に。図表・コンポーネントは全幅のまま。 */
+.issue-content > :is(p, ul, ol, h2, h3, h4, blockquote) {
+  max-width: 44rem;
+}
 .issue-content :is(h2) {
   padding-bottom: var(--space-xs);
   border-bottom: 1px solid var(--outline-variant);
 }
 .issue-content h3 {
-  font-size: 1.02rem;
+  font-size: 1.05rem;
   color: var(--primary);
+  letter-spacing: 0;
+}
+.issue-content :is(p, li) {
+  line-height: 1.9;
 }
 .issue-content ul {
-  padding-left: 1.2em;
+  padding-left: 1.25em;
 }
 .issue-content li {
-  margin: var(--space-xxs) 0;
+  margin: 6px 0;
 }
 
 /* Layer 1: 30秒要約 (primary tonal card) */
