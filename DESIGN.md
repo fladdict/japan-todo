@@ -1,78 +1,73 @@
 ---
 version: alpha
 name: japan-todo
-description: 日本の構造課題を出典つきで整理する公共ナレッジベースのビジュアルアイデンティティ。Material Design 3 を基盤に、静かで信頼でき、エビデンス重視の落ち着いたトーンで設計する。
+description: 日本の構造課題を出典つきで整理する公共ナレッジベースのビジュアルアイデンティティ。原理主義的なスイス・スタイル（インターナショナル・タイポグラフィック・スタイル／グリッドシステム）に基づき、モノクロ＋赤の単一アクセント・角丸なし・影なし・罫線とグリッドで構造化する。
 colors:
-  # Material 3 のロールベース。primary=緑（再生・継続）、tertiary=青緑（補助アクセント）。
-  primary: "#2c6a4b"
+  # スイス：黒インク×白＋赤の単一アクセント。緑・トーナルカラーは使わない。
+  ink: "#141414"
+  accent: "#d62410"
+  on-accent: "#ffffff"
+  primary: "#141414"
   on-primary: "#ffffff"
-  primary-container: "#b2f1c8"
-  on-primary-container: "#00210f"
-  secondary: "#4f6356"
-  on-secondary: "#ffffff"
-  secondary-container: "#d2e8d7"
-  on-secondary-container: "#0c1f15"
-  tertiary: "#3a646f"
-  on-tertiary: "#ffffff"
-  tertiary-container: "#bdeaf7"
-  on-tertiary-container: "#001f27"
-  neutral: "#f8faf5"
-  surface: "#f8faf5"
+  primary-container: "#f1f1ef"
+  on-primary-container: "#141414"
+  secondary: "#5b5b57"
+  secondary-container: "#f1f1ef"
+  on-secondary-container: "#141414"
+  surface: "#ffffff"
   surface-container-lowest: "#ffffff"
-  surface-container-low: "#f1f5ee"
-  surface-container: "#ebefe7"
-  surface-container-high: "#e5e9e1"
-  surface-variant: "#dde5dc"
-  on-surface: "#181d19"
-  on-surface-variant: "#404942"
-  outline: "#707972"
-  outline-variant: "#c0c9bf"
-  error: "#ba1a1a"
-  on-error: "#ffffff"
-  error-container: "#ffdad6"
-  on-error-container: "#410002"
-  # 機能色（緊急度=暖色 / 深刻度=赤系）
-  urgency: "#9c4218"
-  severity: "#9b2226"
+  surface-container-low: "#f7f7f5"
+  surface-container: "#f1f1ef"
+  surface-container-high: "#e8e8e5"
+  surface-variant: "#ececea"
+  on-surface: "#141414"
+  on-surface-variant: "#5b5b57"
+  outline: "#141414"           # 強い罫線
+  outline-variant: "#d7d7d3"   # ヘアライン
+  error: "#b3261e"
+  # 機能色（2トーン）: 緊急度=インク / 深刻度=アクセント赤
+  urgency: "#141414"
+  severity: "#d62410"
 typography:
   display:
-    fontFamily: "'Noto Sans JP', system-ui, sans-serif"
+    fontFamily: "'Inter', 'Noto Sans JP', system-ui, sans-serif"
     fontSize: "clamp(2.2rem, 5vw, 3.4rem)"
     fontWeight: 700
     lineHeight: 1.15
     letterSpacing: "-0.01em"
   headline:
-    fontFamily: "'Noto Sans JP', system-ui, sans-serif"
+    fontFamily: "'Inter', 'Noto Sans JP', system-ui, sans-serif"
     fontSize: "clamp(1.4rem, 3vw, 1.9rem)"
     fontWeight: 700
     lineHeight: 1.3
     letterSpacing: "0"
   title:
-    fontFamily: "'Noto Sans JP', system-ui, sans-serif"
+    fontFamily: "'Inter', 'Noto Sans JP', system-ui, sans-serif"
     fontSize: "1.2rem"
     fontWeight: 700
     lineHeight: 1.4
     letterSpacing: "0"
   body:
-    fontFamily: "'Noto Sans JP', system-ui, sans-serif"
+    fontFamily: "'Inter', 'Noto Sans JP', system-ui, sans-serif"
     fontSize: "1rem"
     fontWeight: 400
     lineHeight: 1.85
     letterSpacing: "0.01em"
   label:
-    fontFamily: "'Noto Sans JP', system-ui, sans-serif"
+    fontFamily: "'Inter', 'Noto Sans JP', system-ui, sans-serif"
     fontSize: "0.8rem"
     fontWeight: 600
     lineHeight: 1.4
     letterSpacing: "0.02em"
 rounded:
+  # スイス：角丸なし。全スケール 0。
   none: "0"
-  xs: "4px"
-  sm: "8px"
-  md: "12px"
-  lg: "16px"
-  xl: "28px"
-  full: "999px"
+  xs: "0"
+  sm: "0"
+  md: "0"
+  lg: "0"
+  xl: "0"
+  full: "0"
 spacing:
   base: "16px"
   xxs: "4px"
@@ -87,28 +82,28 @@ spacing:
 components:
   app-bar:
     background: surface
-    elevation: e1-sticky
+    border-bottom: "1px solid outline"   # 強い罫線・影なし
   card:
     background: surface-container-lowest
     border: "1px solid outline-variant"
-    radius: lg
-    elevation: e0-hover-e1
+    radius: "0"
+    elevation: none                      # 影は使わない・hoverは罫線をinkに
   chip:
     background: surface-container-high
     color: on-surface-variant
-    radius: full
-  callout:
-    background: secondary-container
-    color: on-secondary-container
-    radius: lg
+    radius: "0"                          # 角丸なし（四角いタグ）
   summary-box:
-    background: primary-container
-    color: on-primary-container
-    radius: lg
+    background: surface-container-low
+    rule: "border-top 3px ink"           # 罫線ブロック（緑の塗りは廃止）
+    radius: "0"
+  policy-summary:
+    background: surface-container-low
+    rule: "border-left 3px ink"
+    radius: "0"
   chart:
     background: surface-container-low
-    radius: lg
-    seriesColors: ["#2c6a4b", "#3a646f", "#9c6a2f", "#7a5a8e", "#b3623f", "#4f6356"]
+    radius: "0"
+    seriesColors: ["#141414", "#d62410", "#2f5aa8", "#b5820b", "#7a4ea0", "#6b6b6b"]
     rendering: build-time-svg
     requires: source
 ---
@@ -117,60 +112,60 @@ components:
 
 ## Overview
 
-このサイトは社会課題を煽るためではなく、解くための公共メモリ。トーンは **静か・信頼・エビデンス重視**。
-Material Design 3 のロールベースのカラー、トーンベースのサーフェス、明確なタイプスケール、
-8px グリッド、控えめなエレベーションを採用する。装飾より可読性と一貫性を優先する。
+このサイトは社会課題を煽るためではなく、解くための公共メモリ。トーンは **静か・客観・エビデンス重視**。
+**原理主義的なスイス・スタイル（インターナショナル・タイポグラフィック・スタイル）**を採る：
+モノクロ（黒インク×白）＋**赤の単一アクセント**、**角丸なし・影なし**、**罫線とグリッド**で構造化、
+強いタイポグラフィ階層、フラッシュレフト。装飾を排し、情報の秩序と可読性を最優先する。
 
 ## Colors
 
-Material 3 のロールで運用する。**primary=緑**（再生・継続・公共）を基調に、**tertiary=青緑**を補助アクセントに使う。
-背景は単一の白ではなく、`surface` と `surface-container-*` のトーン差で階層を表現する（トーンベースサーフェス）。
+黒インク `#141414` × 白を基調に、**赤 `#d62410` を単一アクセント**として節制して使う（リンクのホバー/CTA・能動状態・
+深刻度・重要な罫線のみ）。緑やトーナルカラーは使わない。面の階層は淡いグレー（`surface-container-*`）と**罫線**で表す。
 
-- テキストは必ず `on-*` ロールで対になる背景に乗せ、コントラスト AA 以上を確保する。
-- アクセントは使いすぎない。primary は主要なリンク・見出しアクセント・要約ボックスに限定。
-- 課題の **緊急度/深刻度** だけは専用の機能色（`urgency` 暖色 / `severity` 赤系）を使い、意味を即読できるようにする。
+- テキストは `on-*` で対の背景に乗せ、コントラスト AA 以上。
+- 課題の **緊急度=インク / 深刻度=アクセント赤** の2トーンで意味を即読。
+- 赤を多用しない（多用すると階層が壊れる）。
 
 ## Typography
 
-`Noto Sans JP`（Google のオープンフォント、日本語に最適）を主、`system-ui` をフォールバックに使う。
-日本語は行間を広め（body は line-height 1.85）に取り、長文の課題カードでも読みやすくする。
-役割は display / headline / title / body / label の5つに集約する（Material 3 のタイプスケールを簡約）。
+**ラテン/数字 = Inter、和文 = Noto Sans JP** のネオ・グロテスク・ペアリング（スイスの系譜）。
+和文は `font-feature-settings: "palt"`（プロポーショナル）、字間 0.02em、行間 1.8。数字は `tabular-nums` で揃える。
+役割は display / headline / title / body / label。見出しは `text-wrap: balance`、本文は measure を約44remに制限。
 
-## Layout
+## Layout（グリッド）
 
-- 最大幅 `min(1120px, 100% - 32px)` のセンタリング。
+- 最大幅 `min(1120px, 100% - 32px)` のセンタリング。フラッシュレフト（ラグドライト）。
 - 8px グリッド（4 / 8 / 12 / 16 / 24 / 32 / 48）。セクション間は `--space-xxl`。
-- カードグリッドは `repeat(auto-fit, minmax(260px, 1fr))`、ギャップ `--space-md`。
+- カードグリッドは `repeat(auto-fit, minmax(260px, 1fr))`、ギャップ `--space-md`。**節は罫線で区切る**。
 - レスポンシブ: 760px 未満で hero とヘッダーを1カラム化。
 
 ## Elevation & Depth
 
-Material 3 流に**影は控えめ**、階層は主にトーン差で表現する。
+**影は使わない**。深さ・階層は**罫線（1px ヘアライン／1px インク強罫線／3px インク）とグレー面**で表す。
 
-- `e0`: 影なし（既定のカード）。境界は `outline-variant` の1px。
-- `e1`: ホバー時・アプリバー。`0 1px 2px / 0 2px 6px rgba(0,0,0,.08)`。
-- `e2`: 重要な浮遊要素。
-- インタラクションは state layer（ホバーで `on-surface` を 6〜8% 重ねる）で表現する。
+- カード: `outline-variant` の1pxヘアライン。ホバーは**影でなく罫線を `ink` に**（沈み込まない）。
+- インタラクションは下線・罫線・アクセント赤で示す（state layer はごく薄い 4〜8%）。
 
 ## Shapes
 
-角丸スケール（rounded トークン）: カード/要約/コールアウト=`lg(16px)`、入れ子の小要素=`sm/md`、
-チップ・バッジ=`full`（ピル）、フォーカスリング=2px。鋭角は使わない。
+**角丸なし（全 rounded トークン = 0）**。カード・チップ・ボタン・図表すべて矩形。
+フォーカスリングのみ 2px（アクセシビリティ）。鋭角・直線で構成する。
 
 ## Components
 
-- **App bar（ヘッダー）**: `surface` 背景・sticky・`e1`。ブランドは title、ナビは on-surface-variant。
-- **Card**: `surface-container-lowest` + `outline-variant` 枠 + `lg` 角丸。ホバーで `e1` と state layer。
-- **Chip / Badge**: `surface-container-high` のピル。タグ・メタ情報に使う。
-- **Rating（緊急度/深刻度）**: ラベル＋5段階ドット。urgency/severity の機能色で塗る。
-- **Callout**: `secondary-container` のトーナルカード。
-- **Summary box（30秒要約）**: `primary-container` のトーナルカード（Layer1 を強調）。
-- **Details（詳細・根拠）**: outlined、サマリ行はボタン的に。
+- **App bar（ヘッダー）**: `surface` 背景・sticky・**下端 1px インク罫線**（影・ぼかしなし）。
+- **Card**: `surface-container-lowest` + `outline-variant` 1px枠 + **角丸0**。ホバーで枠を `ink` に。
+- **Chip / Badge**: `surface-container-high` の**矩形**タグ。タグ・メタ情報に。
+- **Rating（緊急度/深刻度）**: ラベル＋5段階ドット。**緊急度=インク / 深刻度=赤**。
+- **Summary box（30秒要約＋essence）**: 上端 3px インク罫線のグレー面（緑塗りは廃止）。
+- **政策判断サマリー**: 左端 3px インク罫線のグレー面。
+- **CTA/ボタン**: 黒のソリッド矩形、ホバーで**アクセント赤**反転。
+- **Details（詳細・根拠/実行プラン）**: outlined、サマリ行はリンク的に。
 - **Charts（`src/components/charts/`）**: LineChart（推移）/ BarChart（比較）/ StackedBarChart（内訳）。
   ビルド時に**インラインSVG**へ描画（クライアントJSなし）。系列色は seriesColors を先頭から使用。
   `<figure>` で囲み `<figcaption>` に**出典必須**、`<details>` にデータ表（a11y）。
 - **本質一文（essence）**: Layer1 要約ボックス冒頭に大きめ太字で1文。意思決定者の認知を一段上げる。
-- **政策判断サマリー（policy_summary）**: secondary-container の callout に6項目（いま何が問題か/なぜ今か/最大の制約/
+- **政策判断サマリー（policy_summary）**: 左罫線のグレー面に6項目（いま何が問題か/なぜ今か/最大の制約/
   政策レバー/最重要KPI/政治的争点）を定義リストで。standard以上で表示。
 - **OptionsTable（`src/components/OptionsTable.astro`）**: 政策選択肢の比較。静的HTMLテーブル（選択肢/効果/
   コスト/実現難度/主な副作用/前提）。定量は出典つきのみ。
@@ -182,7 +177,7 @@ Material 3 流に**影は控えめ**、階層は主にトーン差で表現す�
 
 ## Do's and Don'ts
 
-- ✅ トーン差で階層を作る／ロール色で文字を乗せる／余白は8pxグリッド／角丸は統一。
+- ✅ 罫線とグリッドで階層を作る／黒インクで読ませる／余白は8pxグリッド／矩形で統一／フラッシュレフト。
 - ✅ フォーカスリングを必ず出す（キーボード操作）。`prefers-reduced-motion` を尊重。
-- ❌ 影を濃くしない／原色を多用しない／角丸をバラバラにしない／本文の行間を詰めすぎない。
-- ❌ 緊急度/深刻度以外で赤・橙の機能色を使わない（意味が薄れる）。
+- ❌ 影・角丸・グラデーション・トーナルな塗りを使わない／緑を使わない。
+- ❌ アクセント赤を多用しない（リンクのホバー/CTA・能動状態・深刻度・重要罫線のみ）。意味が薄れる。

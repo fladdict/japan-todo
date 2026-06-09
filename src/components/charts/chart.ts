@@ -26,14 +26,14 @@ export const CHART_DIMS = {
   margin: { top: 16, right: 20, bottom: 40, left: 64 },
 };
 
-// 落ち着いた Material 3 寄りの系列パレット（DESIGN.md と一致）。先頭から順に使う。
+// スイス・スタイルのデータ配色（モノクロ＋赤を基調、補助に無彩・寒色）。先頭から順に使う。
 export const SERIES_COLORS = [
-  '#2c6a4b', // primary green
-  '#3a646f', // tertiary teal
-  '#9c6a2f', // amber
-  '#7a5a8e', // muted purple
-  '#b3623f', // terracotta
-  '#4f6356', // secondary slate-green
+  '#141414', // ink
+  '#d62410', // accent red
+  '#2f5aa8', // blue
+  '#b5820b', // ochre
+  '#7a4ea0', // purple
+  '#6b6b6b', // gray
 ];
 
 /** 日本語ロケールの数値整形。unit はそのまま後置（例: "人" "兆円" "%"）。 */

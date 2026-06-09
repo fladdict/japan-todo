@@ -1,56 +1,61 @@
 /* ==========================================================================
-   japan-todo — Material Design 3 ベースのデザインシステム
-   トークンは DESIGN.md と一致。色はロールベース、階層はトーン差＋控えめなelevation。
+   japan-todo — スイス・スタイル（International Typographic Style）のデザインシステム
+   トークンは DESIGN.md と一致。モノクロ＋赤の単一アクセント・角丸0・影なし・罫線とグリッドで構造化。
    ========================================================================== */
 
 :root {
   color-scheme: light;
 
-  /* --- Color roles (Material 3) --- */
-  --primary: #2c6a4b;
+  /* --- Color（スイス・スタイル：モノクロ＋赤の単一アクセント）--- */
+  --ink: #141414;
+  --accent: #d62410; /* 単一アクセント（スイス・レッド）。多用しない */
+  --on-accent: #ffffff;
+
+  /* 役割変数（名前は維持・中身をモノクロ化） */
+  --primary: #141414; /* リンク・見出し・ブロックの主色＝インク */
   --on-primary: #ffffff;
-  --primary-container: #b2f1c8;
-  --on-primary-container: #00210f;
-  --secondary: #4f6356;
+  --primary-container: #f1f1ef; /* 旧・要約ボックス → ライトグレー面（緑廃止） */
+  --on-primary-container: #141414;
+  --secondary: #5b5b57;
   --on-secondary: #ffffff;
-  --secondary-container: #d2e8d7;
-  --on-secondary-container: #0c1f15;
-  --tertiary: #3a646f;
+  --secondary-container: #f1f1ef; /* 旧・政策サマリー → グレー面 */
+  --on-secondary-container: #141414;
+  --tertiary: #141414;
   --on-tertiary: #ffffff;
-  --tertiary-container: #bdeaf7;
-  --on-tertiary-container: #001f27;
+  --tertiary-container: #f1f1ef;
+  --on-tertiary-container: #141414;
 
-  --surface: #f8faf5;
+  --surface: #ffffff;
   --surface-container-lowest: #ffffff;
-  --surface-container-low: #f1f5ee;
-  --surface-container: #ebefe7;
-  --surface-container-high: #e5e9e1;
-  --surface-variant: #dde5dc;
-  --on-surface: #181d19;
-  --on-surface-variant: #404942;
-  --outline: #707972;
-  --outline-variant: #c0c9bf;
+  --surface-container-low: #f7f7f5;
+  --surface-container: #f1f1ef;
+  --surface-container-high: #e8e8e5;
+  --surface-variant: #ececea;
+  --on-surface: #141414;
+  --on-surface-variant: #5b5b57;
+  --outline: #141414; /* 強い罫線 */
+  --outline-variant: #d7d7d3; /* ヘアライン */
 
-  --error: #ba1a1a;
+  --error: #b3261e;
   --on-error: #ffffff;
-  --error-container: #ffdad6;
-  --on-error-container: #410002;
+  --error-container: #f7e6e4;
+  --on-error-container: #3a0b07;
 
-  /* 機能色: 緊急度=暖色 / 深刻度=赤系 */
-  --urgency: #9c4218;
-  --severity: #9b2226;
+  /* 機能色（2トーンに抑制）: 緊急度=インク / 深刻度=アクセント赤 */
+  --urgency: #141414;
+  --severity: #d62410;
 
-  /* state layer */
-  --state-hover: rgba(24, 29, 25, 0.06);
-  --state-press: rgba(24, 29, 25, 0.10);
+  /* state layer（ごく薄く） */
+  --state-hover: rgba(0, 0, 0, 0.045);
+  --state-press: rgba(0, 0, 0, 0.08);
 
-  /* --- Shape scale --- */
-  --radius-xs: 4px;
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 28px;
-  --radius-full: 999px;
+  /* --- Shape（角丸を排する）--- */
+  --radius-xs: 0;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-full: 0;
 
   /* --- Spacing (8px grid) --- */
   --space-xxs: 4px;
@@ -61,9 +66,9 @@
   --space-xl: 32px;
   --space-xxl: 48px;
 
-  /* --- Elevation --- */
-  --e1: 0 1px 2px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.08);
-  --e2: 0 2px 4px rgba(0, 0, 0, 0.07), 0 6px 12px rgba(0, 0, 0, 0.10);
+  /* --- Elevation（影は使わない・罫線で構造化）--- */
+  --e1: none;
+  --e2: none;
 
   /* --- Type --- */
   /* ラテン/数字=Inter、和文=Noto Sans JP のモダン・ペアリング */
@@ -134,6 +139,8 @@ h2 {
   letter-spacing: -0.01em;
   margin-top: var(--space-xl);
   margin-bottom: var(--space-md);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--outline); /* スイス流：節を罫線で区切る */
   text-wrap: balance;
 }
 h3 {
@@ -145,10 +152,10 @@ h3 {
   text-wrap: balance;
 }
 .eyebrow {
-  color: var(--primary);
+  color: var(--accent);
   font-weight: 700;
-  letter-spacing: 0.06em;
-  font-size: 0.82rem;
+  letter-spacing: 0.14em;
+  font-size: 0.78rem;
   text-transform: uppercase;
   margin: 0;
 }
@@ -168,9 +175,8 @@ h3 {
   justify-content: space-between;
   gap: var(--space-lg);
   padding: var(--space-sm) max(16px, calc((100% - 1120px) / 2));
-  background: color-mix(in srgb, var(--surface) 86%, transparent);
-  backdrop-filter: saturate(1.4) blur(8px);
-  border-bottom: 1px solid var(--outline-variant);
+  background: var(--surface);
+  border-bottom: 1px solid var(--outline);
 }
 .brand {
   font-weight: 800;
@@ -228,8 +234,8 @@ nav a:hover {
 }
 .cta:hover {
   text-decoration: none;
-  box-shadow: var(--e1);
-  background: color-mix(in srgb, var(--primary) 92%, #000);
+  background: var(--accent);
+  color: var(--on-accent);
 }
 
 /* --- Grid & Cards --- */
@@ -417,13 +423,16 @@ nav a:hover {
   max-width: 44rem;
 }
 .issue-content :is(h2) {
-  padding-bottom: var(--space-xs);
-  border-bottom: 1px solid var(--outline-variant);
+  margin-top: var(--space-xl);
 }
 .issue-content h3 {
   font-size: 1.05rem;
-  color: var(--primary);
+  color: var(--on-surface);
   letter-spacing: 0;
+}
+.issue-content a {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
 }
 .issue-content :is(p, li) {
   line-height: 1.9;
@@ -437,15 +446,18 @@ nav a:hover {
 
 /* Layer 1: 30秒要約 (primary tonal card) */
 .summary-box {
-  background: var(--primary-container);
-  color: var(--on-primary-container);
-  border-radius: var(--radius-lg);
+  background: var(--surface-container-low);
+  color: var(--on-surface);
+  border-top: 3px solid var(--ink);
+  border-bottom: 1px solid var(--outline-variant);
   padding: var(--space-md) var(--space-lg);
   margin: var(--space-lg) 0 var(--space-xs);
 }
 .summary-box h2 {
   margin: 0 0 var(--space-xs);
-  font-size: 1.1rem;
+  font-size: 1.05rem;
+  border-top: none;
+  padding-top: 0;
 }
 .summary-box ul {
   margin: 0;
@@ -507,15 +519,15 @@ nav a:hover {
 }
 .summary-box .essence + h2 {
   margin-top: var(--space-sm);
-  border-top: 1px solid color-mix(in srgb, var(--on-primary-container) 18%, transparent);
+  border-top: 1px solid var(--outline-variant);
   padding-top: var(--space-sm);
 }
 
 /* --- 政策判断サマリー --- */
 .policy-summary {
-  background: var(--secondary-container);
-  color: var(--on-secondary-container);
-  border-radius: var(--radius-lg);
+  background: var(--surface-container-low);
+  color: var(--on-surface);
+  border-left: 3px solid var(--ink);
   padding: var(--space-md) var(--space-lg);
   margin: var(--space-sm) 0 var(--space-md);
 }
