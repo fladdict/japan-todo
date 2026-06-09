@@ -690,6 +690,47 @@ nav a:hover {
   margin-bottom: 2px;
 }
 
+/* --- 実行プラン（アコーディオン）--- */
+.action-plan {
+  margin: var(--space-lg) 0;
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-lg);
+  background: var(--surface-container-low);
+  padding: var(--space-sm) var(--space-md);
+}
+.action-plan > summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--primary);
+  list-style-position: inside;
+  padding: var(--space-xs) 0;
+}
+.action-plan[open] > summary {
+  border-bottom: 1px solid var(--outline-variant);
+  margin-bottom: var(--space-sm);
+}
+.ap-phase { margin-top: var(--space-sm); }
+.ap-horizon {
+  margin: var(--space-xs) 0;
+  font-size: 0.95rem;
+  color: var(--on-surface);
+}
+.ap-scroll { overflow-x: auto; }
+.action-plan table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.86rem;
+}
+.action-plan th,
+.action-plan td {
+  border: 1px solid var(--outline-variant);
+  padding: 6px 9px;
+  text-align: left;
+  vertical-align: top;
+}
+.action-plan thead th { background: var(--surface-container-high); white-space: nowrap; }
+.action-plan tbody th { background: var(--surface-container); font-weight: 700; }
+
 /* --- 課題マップ --- */
 .map-cat { margin-top: var(--space-xl); }
 .map-cat h2 { margin-bottom: var(--space-sm); }

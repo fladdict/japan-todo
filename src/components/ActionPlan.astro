@@ -1,0 +1,50 @@
+---
+// 実行プラン（深掘り）: 時系列の実行ロードマップをカード内アコーディオンで。
+// 静的HTML・クライアントJSなし。中身は本文の既出内容（具体的制度・出典つき）から再構成する。
+interface Item {
+  action: string; // 具体的な施策・打ち手
+  who?: string; // 担い手（主体）
+  means?: string; // 手段（制度・予算・規制・既存制度名）
+  milestone?: string; // 里程標・指標
+}
+interface Phase {
+  horizon: string; // 例: 短期（〜2年）/ 中期（3〜5年）/ 長期（5年〜）
+  items: Item[];
+}
+interface Props {
+  phases: Phase[];
+  caption?: string;
+}
+const { phases, caption = '実行プラン（深掘り）' } = Astro.props;
+---
+
+<details class="action-plan">
+  <summary>{caption}</summary>
+  {phases.map((phase) => (
+    <section class="ap-phase">
+      <h4 class="ap-horizon">{phase.horizon}</h4>
+      <div class="ap-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">打ち手</th>
+              <th scope="col">担い手</th>
+              <th scope="col">手段</th>
+              <th scope="col">里程標・指標</th>
+            </tr>
+          </thead>
+          <tbody>
+            {phase.items.map((it) => (
+              <tr>
+                <th scope="row">{it.action}</th>
+                <td>{it.who ?? '—'}</td>
+                <td>{it.means ?? '—'}</td>
+                <td>{it.milestone ?? '—'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  ))}
+</details>

@@ -51,8 +51,10 @@ Workflow({ name: "enrich-issues", args: [
 
 ## 一括処理後の中央作業（必須）
 
-1. `npm run check`（0 errors）/ `npm run build`（全ページ生成）
-2. `category` が日本語タイトルか、`maturity`/`summary` 等の frontmatter 完全性を確認
+1. **`npm run verify`**（コンテンツLinter：related id実在・出典URL形式・コンポーネントimport欠落・category突合の
+   エラー＝0必須／鮮度・整合の警告／数値ダイジェスト）。エラーが出たら直す。
+2. `npm run check`（0 errors）/ `npm run build`（全ページ生成）
+3. `category` が日本語タイトルか、`maturity`/`summary` 等の frontmatter 完全性を確認
 3. `docs/BACKLOG.md` の状態を更新
 4. コミット → push → GitHub Actions デプロイ確認
 
