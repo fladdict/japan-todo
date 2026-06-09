@@ -4,7 +4,7 @@ import { categories } from '../data/categories';
 import { sitePath } from '../lib/url';
 import { forceSimulation, forceManyBody, forceLink, forceCollide, forceX, forceY } from 'd3-force';
 
-// 分類カラー（M3寄り・8色）
+// 分類カラー（M3寄り・9色）
 // スイス・スタイルの分類カラー（緑を排した無彩・寒色・暖色の識別用カテゴリ配色）
 const CAT_COLORS: Record<string, string> = {
   '人口・家族・世代': '#141414',
@@ -15,6 +15,7 @@ const CAT_COLORS: Record<string, string> = {
   '環境・エネルギー・防災': '#3b5a7a',
   'デジタル・AI・情報空間': '#7a4ea0',
   '民主主義・信頼・共生': '#b03060',
+  '外交・安全保障': '#2e7d8a',
 };
 
 const issues = await getCollection('issues');
@@ -45,7 +46,7 @@ for (const i of issues) {
   }
 }
 
-// 分類クラスタ中心（円周上に8分類）
+// 分類クラスタ中心（円周上に全分類を等間隔配置）
 const W = 960;
 const H = 760;
 const cats = categories.map((c) => c.title);
