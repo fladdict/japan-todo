@@ -731,7 +731,44 @@ nav a:hover {
 .action-plan thead th { background: var(--surface-container-high); white-space: nowrap; }
 .action-plan tbody th { background: var(--surface-container); font-weight: 700; }
 
-/* --- 課題マップ --- */
+/* --- 課題グラフ（ビジュアル課題マップ）--- */
+.issue-graph { margin: var(--space-md) 0 var(--space-xl); }
+.issue-graph > figcaption { color: var(--on-surface-variant); font-size: 0.9rem; margin-bottom: var(--space-sm); }
+.ig-legend { display: flex; flex-wrap: wrap; gap: var(--space-xs); margin-bottom: var(--space-sm); }
+.ig-legend-item, .ig-legend-reset {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: 1px solid var(--outline-variant); background: var(--surface-container-lowest);
+  color: var(--on-surface-variant); border-radius: var(--radius-full);
+  padding: 4px 12px; font-size: 0.8rem; font-weight: 600; cursor: pointer;
+}
+.ig-legend-item:hover, .ig-legend-reset:hover { background: var(--state-hover); }
+.ig-legend-item.ig-on { background: var(--on-surface); color: var(--surface); border-color: var(--on-surface); }
+.ig-swatch { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
+.ig-svg {
+  width: 100%; height: auto; display: block;
+  background: var(--surface-container-low);
+  border: 1px solid var(--outline-variant); border-radius: var(--radius-lg);
+}
+.ig-edge { stroke: var(--outline-variant); stroke-width: 1; }
+.ig-node { cursor: pointer; }
+.ig-node circle { stroke: var(--surface); stroke-width: 1.5; transition: opacity 0.15s ease; }
+.ig-label {
+  font-size: 9px; fill: var(--on-surface-variant); pointer-events: none;
+  opacity: 0; transition: opacity 0.15s ease;
+}
+.ig-node:hover .ig-label, .ig-node:focus .ig-label, .ig-node.ig-hi .ig-label { opacity: 1; }
+/* ホバー時：関連以外を減光 */
+.ig-svg.ig-focus .ig-node:not(.ig-hi) { opacity: 0.18; }
+.ig-svg.ig-focus .ig-edge:not(.ig-hi) { opacity: 0.06; }
+.ig-svg.ig-focus .ig-edge.ig-hi { stroke: var(--on-surface-variant); stroke-width: 1.6; }
+/* 分類フィルタ：対象外を減光 */
+.ig-svg.ig-filtered .ig-node.ig-muted { opacity: 0.12; }
+.ig-node:focus-visible circle { outline: 2px solid var(--primary); }
+@media (prefers-reduced-motion: reduce) {
+  .ig-node circle, .ig-label { transition: none; }
+}
+
+/* --- 課題マップ（一覧）--- */
 .map-cat { margin-top: var(--space-xl); }
 .map-cat h2 { margin-bottom: var(--space-sm); }
 .map-count {

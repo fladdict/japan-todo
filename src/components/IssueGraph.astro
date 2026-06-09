@@ -1,0 +1,169 @@
+---
+import { getCollection } from 'astro:content';
+import { categories } from '../data/categories';
+import { sitePath } from '../lib/url';
+import { forceSimulation, forceManyBody, forceLink, forceCollide, forceX, forceY } from 'd3-force';
+
+// 分類カラー（M3寄り・8色）
+const CAT_COLORS: Record<string, string> = {
+  '人口・家族・世代': '#2c6a4b',
+  '人的資本・働き方・教育': '#3a646f',
+  '財政・社会保障・行政': '#9c6a2f',
+  '地域・都市・インフラ': '#7a5a8e',
+  '産業・企業・経済成長': '#b3623f',
+  '環境・エネルギー・防災': '#4f6356',
+  'デジタル・AI・情報空間': '#2f6f8f',
+  '民主主義・信頼・共生': '#8a4a5e',
+};
+
+const issues = await getCollection('issues');
+
+type GNode = { id: string; title: string; category: string; urgency: number; x?: number; y?: number };
+const nodes: GNode[] = issues.map((i) => ({
+  id: i.id,
+  title: i.data.title,
+  category: i.data.category,
+  urgency: i.data.urgency,
+}));
+const idset = new Set(nodes.map((n) => n.id));
+
+// 無向・重複排除のエッジ（related の双方向）＋隣接
+const edgeKey = new Set<string>();
+const links: { source: any; target: any }[] = [];
+const adj = new Map<string, Set<string>>();
+nodes.forEach((n) => adj.set(n.id, new Set()));
+for (const i of issues) {
+  for (const r of i.data.related) {
+    if (!idset.has(r)) continue;
+    const key = [i.id, r].sort().join('|');
+    if (edgeKey.has(key)) continue;
+    edgeKey.add(key);
+    links.push({ source: i.id, target: r });
+    adj.get(i.id)!.add(r);
+    adj.get(r)!.add(i.id);
+  }
+}
+
+// 分類クラスタ中心（円周上に8分類）
+const W = 960;
+const H = 760;
+const cats = categories.map((c) => c.title);
+const centerX: Record<string, number> = {};
+const centerY: Record<string, number> = {};
+cats.forEach((t, k) => {
+  const a = (2 * Math.PI * k) / cats.length - Math.PI / 2;
+  centerX[t] = W / 2 + Math.cos(a) * W * 0.33;
+  centerY[t] = H / 2 + Math.sin(a) * H * 0.34;
+});
+
+const sim = forceSimulation(nodes as any)
+  .force('charge', forceManyBody().strength(-200))
+  .force('link', forceLink(links).id((d: any) => d.id).distance(64).strength(0.22))
+  .force('x', forceX((d: any) => centerX[d.category] ?? W / 2).strength(0.28))
+  .force('y', forceY((d: any) => centerY[d.category] ?? H / 2).strength(0.28))
+  .force('collide', forceCollide(20))
+  .stop();
+for (let t = 0; t < 420; t++) sim.tick();
+
+// バウンディングボックス → viewBox
+const pad = 36;
+const xs = nodes.map((n) => n.x!);
+const ys = nodes.map((n) => n.y!);
+const minX = Math.min(...xs) - pad;
+const minY = Math.min(...ys) - pad;
+const vbW = Math.max(...xs) - minX + pad;
+const vbH = Math.max(...ys) - minY + pad;
+
+const edges = links.map((l: any) => ({ x1: l.source.x, y1: l.source.y, x2: l.target.x, y2: l.target.y, a: l.source.id, b: l.target.id }));
+const rOf = (u: number) => 5 + u * 1.7;
+---
+
+<figure class="issue-graph">
+  <figcaption>関連でたどる課題マップ（{nodes.length}課題・{edges.length}本の関連）。点=課題（色=分類・大きさ=緊急度）、線=関連。点に触れると関連が強調されます。</figcaption>
+  <div class="ig-legend" role="group" aria-label="分類でフィルタ">
+    {categories.map((c) => (
+      <button type="button" class="ig-legend-item" data-cat={c.title}>
+        <span class="ig-swatch" style={`background:${CAT_COLORS[c.title]}`}></span>{c.title}
+      </button>
+    ))}
+    <button type="button" class="ig-legend-reset">すべて表示</button>
+  </div>
+  <svg class="ig-svg" viewBox={`${minX} ${minY} ${vbW} ${vbH}`} role="img" aria-label="課題の関連グラフ">
+    <g class="ig-edges">
+      {edges.map((e) => (
+        <line x1={e.x1} y1={e.y1} x2={e.x2} y2={e.y2} class="ig-edge" data-a={e.a} data-b={e.b} />
+      ))}
+    </g>
+    <g class="ig-nodes">
+      {nodes.map((n) => (
+        <a
+          class="ig-node"
+          href={sitePath(`/issues/${n.id}`)}
+          data-id={n.id}
+          data-cat={n.category}
+          data-nb={[...adj.get(n.id)!].join(' ')}
+        >
+          <circle cx={n.x} cy={n.y} r={rOf(n.urgency)} fill={CAT_COLORS[n.category] ?? '#888'} />
+          <text x={n.x} y={n.y! - rOf(n.urgency) - 3} text-anchor="middle" class="ig-label">{n.title}</text>
+        </a>
+      ))}
+    </g>
+  </svg>
+</figure>
+
+<script>
+  // レイアウトはビルド時に確定済み。ここは強調・フィルタのみ（安定・小さなモジュール）。
+  document.querySelectorAll<HTMLElement>('.issue-graph').forEach((root) => {
+    const svg = root.querySelector('.ig-svg');
+    if (!svg) return;
+    const nodes = Array.from(root.querySelectorAll<HTMLElement>('.ig-node'));
+    const edges = Array.from(root.querySelectorAll<HTMLElement>('.ig-edge'));
+    const idOf = (n: Element) => n.getAttribute('data-id') || '';
+    const nbOf = (n: Element) => (n.getAttribute('data-nb') || '').split(' ').filter(Boolean);
+
+    function highlight(center: Element) {
+      const keep = new Set([idOf(center), ...nbOf(center)]);
+      svg!.classList.add('ig-focus');
+      nodes.forEach((n) => n.classList.toggle('ig-hi', keep.has(idOf(n))));
+      edges.forEach((e) => {
+        const a = e.getAttribute('data-a') || '';
+        const b = e.getAttribute('data-b') || '';
+        e.classList.toggle('ig-hi', keep.has(a) && keep.has(b) && (a === idOf(center) || b === idOf(center)));
+      });
+    }
+    function clear() {
+      svg!.classList.remove('ig-focus');
+      nodes.forEach((n) => n.classList.remove('ig-hi'));
+      edges.forEach((e) => e.classList.remove('ig-hi'));
+    }
+    nodes.forEach((n) => {
+      n.addEventListener('mouseenter', () => highlight(n));
+      n.addEventListener('focus', () => highlight(n));
+      n.addEventListener('mouseleave', clear);
+      n.addEventListener('blur', clear);
+    });
+
+    // 分類フィルタ
+    const active = new Set<string>();
+    const apply = () => {
+      svg!.classList.toggle('ig-filtered', active.size > 0);
+      nodes.forEach((n) =>
+        n.classList.toggle('ig-muted', active.size > 0 && !active.has(n.getAttribute('data-cat') || '')),
+      );
+    };
+    root.querySelectorAll<HTMLElement>('.ig-legend-item').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const cat = btn.getAttribute('data-cat') || '';
+        if (active.has(cat)) active.delete(cat);
+        else active.add(cat);
+        btn.classList.toggle('ig-on', active.has(cat));
+        apply();
+      });
+    });
+    root.querySelector('.ig-legend-reset')?.addEventListener('click', () => {
+      active.clear();
+      root.querySelectorAll('.ig-legend-item').forEach((b) => b.classList.remove('ig-on'));
+      apply();
+    });
+  });
+</script>
