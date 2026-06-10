@@ -1,0 +1,34 @@
+---
+// 課題カード向けの図解コンポーネント。
+// beautiful-mermaid で「ビルド時に」Mermaid を SVG 化して静的に埋め込む（クライアントJSゼロ）。
+// LineChart/IssueGraph と同じビルド時 SVG 生成の方針。
+// 不正な記法でもビルドを落とさず、フォールバックでコードを表示する。
+import { renderMermaidSVG } from 'beautiful-mermaid';
+import { SWISS_MERMAID_THEME } from './mermaidTheme';
+
+interface Props {
+  code: string; // Mermaid 記法（1行目に graph TD / graph LR / stateDiagram-v2 等。各エッジは改行で）
+  title?: string; // 図のタイトル（figcaption）
+  caption?: string; // 図の下の補足
+}
+const { code, title, caption } = Astro.props;
+
+let svg = '';
+let failed = false;
+try {
+  svg = renderMermaidSVG(code.trim(), SWISS_MERMAID_THEME);
+} catch (e) {
+  failed = true;
+  console.warn(`[Mermaid] 図のレンダリングに失敗（フォールバック表示）: ${(e as Error).message}`);
+}
+---
+
+<figure class="diagram">
+  {title && <figcaption class="diagram-title">{title}</figcaption>}
+  {failed ? (
+    <pre class="diagram-error">{code}</pre>
+  ) : (
+    <div class="diagram-svg" set:html={svg} />
+  )}
+  {caption && <p class="diagram-caption">{caption}</p>}
+</figure>

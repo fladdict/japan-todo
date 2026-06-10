@@ -19,7 +19,7 @@ const errors = [];
 const warnings = [];
 const digest = [];
 
-const CHART_TAGS = ['LineChart', 'BarChart', 'StackedBarChart', 'OptionsTable', 'ActionPlan'];
+const CHART_TAGS = ['LineChart', 'BarChart', 'StackedBarChart', 'OptionsTable', 'ActionPlan', 'Mermaid'];
 
 for (const file of files) {
   const slug = file.replace(`${ISSUE_DIR}/`, '').replace('.mdx', '');

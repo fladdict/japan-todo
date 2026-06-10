@@ -24,8 +24,18 @@ L3 draft-issue（速）→ enrich-issue（standard / deep）   本文を書く
 - **L1/L2**: `plan-agenda`（計画。本文は書かない）
 - **L3 下書き**: `draft-issue`（軽い一次情報＋12節、maturity=draft）
 - **L3 精緻化**: `enrich-issue`
-  - **standard（既定）**: 単一エージェントが WebFetch で出典実在確認＋良い事例裏取り → review
+  - **standard（既定）**: 単一エージェントが WebFetch で出典実在確認＋良い事例裏取り＋**図解（Mermaid）2枚**（原因図＋対処フロー）→ review
   - **deep（最重要のみ）**: `deep-research` の5角度＋3票検証
+
+### 図解（Mermaid / `Mermaid.astro`）
+
+enrich standard の標準成果物として、本文の論理を可視化する図を2枚入れる:
+- **原因構造** 節の直後 → 因果図（`graph TD`、本文既出の原因のみ・4〜8ノード・悪循環は矢印で閉じる）
+- **解決の方向性** 節の直後 → 対処のワークフロー図（`graph LR`、打ち手→中間効果→到達状態）
+
+`beautiful-mermaid` で**ビルド時に SVG 化**するためクライアントJSは増えない。配色は `Mermaid.astro` の
+スイステーマが自動適用（緑なし）。対応図種は flowchart/state/sequence（gantt不可）。図は本文ロジックの
+可視化であり**新事実・数値・未根拠の因果を足さない**。実例は population/low-birthrate ほか代表4枚。
 
 ## 一括処理は Workflow で fan-out する
 

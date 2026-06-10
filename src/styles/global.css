@@ -682,6 +682,34 @@ nav a:hover {
   user-select: all;
 }
 
+/* --- 図解（Mermaid / Diagram） --- */
+.diagram {
+  margin: var(--space-lg) 0;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--surface-container-low);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-lg);
+}
+.diagram-title {
+  font-weight: 700;
+  font-size: 0.98rem;
+  margin-bottom: var(--space-sm);
+  color: var(--on-surface);
+}
+.diagram-svg { overflow-x: auto; }
+.diagram-svg svg { width: 100%; height: auto; display: block; max-width: 100%; }
+.diagram-caption {
+  margin: var(--space-sm) 0 0;
+  font-size: 0.82rem;
+  color: var(--on-surface-variant);
+}
+.diagram-error {
+  font-size: 0.8rem;
+  color: var(--on-surface-variant);
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
 /* --- Charts --- */
 .chart {
   margin: var(--space-lg) 0;
