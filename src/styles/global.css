@@ -44,6 +44,7 @@
   /* 機能色（2トーンに抑制）: 緊急度=インク / 深刻度=アクセント赤 */
   --urgency: #141414;
   --severity: #d62410;
+  --critical: #9e1b10; /* 最重要（緊急度×深刻度≧15）のタイトル＝ややダークレッド */
 
   /* state layer（ごく薄く） */
   --state-hover: rgba(0, 0, 0, 0.045);
@@ -269,6 +270,15 @@ nav a:hover {
 }
 .card h3 a:hover {
   color: var(--primary);
+}
+/* 最重要（緊急度×深刻度≧15）のタイトルはダークレッド。カード/カテゴリ一覧共通 */
+.card h3 a.title-critical,
+.category-issues a.title-critical {
+  color: var(--critical);
+}
+.card h3 a.title-critical:hover,
+.category-issues a.title-critical:hover {
+  color: #7d150c;
 }
 .card p {
   margin: 0;

@@ -7,6 +7,7 @@ interface Props {
   issue: CollectionEntry<'issues'>;
 }
 const { issue } = Astro.props;
+const isCritical = issue.data.urgency * issue.data.severity >= 15;
 ---
 
 <article class="card">
@@ -14,7 +15,7 @@ const { issue } = Astro.props;
     <Rating label="緊急度" value={issue.data.urgency} variant="urgency" />
     <Rating label="深刻度" value={issue.data.severity} variant="severity" />
   </div>
-  <h3><a href={sitePath(`/issues/${issue.id}`)}>{issue.data.title}</a></h3>
+  <h3><a class={isCritical ? 'title-critical' : undefined} href={sitePath(`/issues/${issue.id}`)}>{issue.data.title}</a></h3>
   <p>{issue.data.description}</p>
   <div class="meta" aria-label="Tags">
     <span class="badge">{issue.data.category}</span>
