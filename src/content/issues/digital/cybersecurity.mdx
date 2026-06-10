@@ -56,6 +56,7 @@ sources:
 
 import OptionsTable from '../../../components/OptionsTable.astro';
 import ActionPlan from '../../../components/ActionPlan.astro';
+import Mermaid from '../../../components/Mermaid.astro';
 
 ## 課題の定義（扱う／扱わない）
 
@@ -92,6 +93,13 @@ import ActionPlan from '../../../components/ActionPlan.astro';
 - **制度の遅れ**：従来は事後対処中心で、攻撃の兆候段階で動く法的根拠が乏しかった。
 - **境界防御の限界**：VPN機器など公開資産が侵入口になりやすく、脆弱性管理・更新が追いつかない。
 
+<Mermaid title="原因構造：中小の弱さと制度の遅れが被害拡大を生む" code={`graph TD
+  A["裾野の弱さ 中小が入口"] --> Z["サイバー被害の拡大"]
+  B["人材不足"] --> Z
+  C["情報の非対称"] --> Z
+  D["制度の遅れ 事後対処中心"] --> Z
+  E["境界防御の限界 公開資産の侵入"] --> Z`} caption="本文の原因記述を図化したもの。" />
+
 ## 誰が、どう困るか（影響）
 
 - **重要インフラ事業者**（電力・通信・金融・医療・行政など）：停止すれば社会全体に波及する。
@@ -111,6 +119,12 @@ import ActionPlan from '../../../components/ActionPlan.astro';
 - 司令塔（国家サイバー統括室／NCO）を中心に、官民・分野横断の情報共有を恒常化する。
 - 中小企業を含む裾野の底上げ（基本対策の徹底、お助け隊サービスや補助金などの支援制度の活用）。
 - 専門人材の育成・確保と、攻撃面（VPN等公開資産）の脆弱性管理の徹底。
+
+<Mermaid title="対処のワークフロー：制度実装と裾野底上げで防御力を高める" code={`graph LR
+  S1["能動的サイバー防御の制度実装"] --> G["防御力の向上"]
+  S2["NCO司令塔と官民情報共有"] --> G
+  S3["中小裾野の底上げ お助け隊や補助金"] --> G
+  S4["人材育成と脆弱性管理の徹底"] --> G`} caption="本文「解決の方向性」を図化したもの。" />
 
 ## 政策選択肢の比較
 
