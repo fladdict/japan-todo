@@ -93,8 +93,8 @@ body {
   margin: 0;
   background: var(--surface);
   color: var(--on-surface);
-  line-height: 1.8;
-  letter-spacing: 0.02em;
+  line-height: 1.7;
+  letter-spacing: 0.01em;
   font-feature-settings: 'palt' 1; /* 和文プロポーショナル（モダンJPタイポ） */
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -138,10 +138,10 @@ h1 {
 h2 {
   font-size: clamp(1.35rem, 2.6vw, 1.7rem);
   font-weight: 700;
-  line-height: 1.35;
+  line-height: 1.3;
   letter-spacing: -0.01em;
-  margin-top: var(--space-xl);
-  margin-bottom: var(--space-md);
+  margin-top: var(--space-lg);
+  margin-bottom: var(--space-sm);
   padding-top: var(--space-sm);
   border-top: 1px solid var(--outline); /* スイス流：節を罫線で区切る */
   text-wrap: balance;
@@ -199,9 +199,10 @@ h2 {
 h3 {
   font-size: 1.18rem;
   font-weight: 700;
-  line-height: 1.45;
+  line-height: 1.4;
   letter-spacing: -0.005em;
-  margin-top: var(--space-xl);
+  margin-top: var(--space-lg);
+  margin-bottom: var(--space-xs);
   text-wrap: balance;
 }
 .eyebrow {
@@ -505,24 +506,32 @@ nav a:hover {
   max-width: 44rem;
 }
 .issue-content :is(h2) {
-  margin-top: var(--space-xl);
+  margin-top: var(--space-lg);
 }
 .issue-content h3 {
   font-size: 1.05rem;
   color: var(--on-surface);
   letter-spacing: 0;
+  margin-top: var(--space-lg);
 }
 .issue-content a {
   text-underline-offset: 0.15em; /* 下線は base の薄いグレーを継承（本文も統一） */
 }
 .issue-content :is(p, li) {
-  line-height: 1.9;
+  line-height: 1.75;
+}
+/* 段落の縦リズムを一定に（UA既定の 1em より締める） */
+.issue-content > p {
+  margin: 0 0 var(--space-sm);
+}
+.issue-content > :is(ul, ol) {
+  margin: 0 0 var(--space-sm);
 }
 .issue-content ul {
   padding-left: 1.25em;
 }
 .issue-content li {
-  margin: 6px 0;
+  margin: 4px 0;
 }
 
 /* Layer 1: 30秒要約 (primary tonal card) */
