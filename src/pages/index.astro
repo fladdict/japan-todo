@@ -10,10 +10,20 @@ const issues = (await getCollection('issues')).sort(
   (a, b) => b.data.last_reviewed.getTime() - a.data.last_reviewed.getTime(),
 );
 const featuredIssues = issues;
+// 既定は「重要度（緊急度×深刻度）」降順。同点は深刻度→緊急度→タイトルで安定化。
+// JS なしでもこの順で並ぶ（ボタンはプログレッシブ・エンハンスメント）。
+const score = (i: { data: { urgency: number; severity: number } }) =>
+  i.data.urgency * i.data.severity;
 const issuesByCategory = (title: string) =>
   issues
     .filter((issue) => issue.data.category === title)
-    .sort((a, b) => a.data.title.localeCompare(b.data.title, 'ja'));
+    .sort(
+      (a, b) =>
+        score(b) - score(a) ||
+        b.data.severity - a.data.severity ||
+        b.data.urgency - a.data.urgency ||
+        a.data.title.localeCompare(b.data.title, 'ja'),
+    );
 ---
 
 <BaseLayout>
@@ -24,14 +34,67 @@ const issuesByCategory = (title: string) =>
     <p><a class="cta" href={sitePath('/issues')}>課題一覧を見る →</a></p>
   </section>
 
-  <section>
-    <h2>{categories.length}つの社会システム</h2>
+  <section class="cat-section">
+    <div class="section-head">
+      <h2>{categories.length}つの社会システム</h2>
+      <div class="sort-control" role="group" aria-label="各分類内の課題の並び替え">
+        <span class="sort-label">並び替え</span>
+        <button type="button" class="sort-btn is-active" data-sort="total" aria-pressed="true">重要度</button>
+        <button type="button" class="sort-btn" data-sort="urgency" aria-pressed="false">緊急度</button>
+        <button type="button" class="sort-btn" data-sort="severity" aria-pressed="false">深刻度</button>
+      </div>
+    </div>
     <div class="grid">
       {categories.map((category) => (
         <CategoryCard {...category} issues={issuesByCategory(category.title)} />
       ))}
     </div>
   </section>
+
+  <script>
+    // 分類カード内の課題リストを、緊急度/深刻度/重要度(積)で再ソート（クライアント側）。
+    document.querySelectorAll<HTMLElement>('.cat-section').forEach((section) => {
+      const lists = Array.from(section.querySelectorAll<HTMLUListElement>('.category-issues'));
+      const buttons = Array.from(section.querySelectorAll<HTMLButtonElement>('.sort-btn'));
+      const num = (el: Element, key: string) => Number(el.getAttribute(key) || 0);
+      const keyOf = (li: Element, mode: string) =>
+        mode === 'urgency'
+          ? num(li, 'data-urgency')
+          : mode === 'severity'
+            ? num(li, 'data-severity')
+            : num(li, 'data-urgency') * num(li, 'data-severity');
+
+      const sortAll = (mode: string) => {
+        for (const ul of lists) {
+          const items = Array.from(ul.children) as HTMLElement[];
+          items
+            .sort(
+              (a, b) =>
+                keyOf(b, mode) - keyOf(a, mode) ||
+                num(b, 'data-severity') - num(a, 'data-severity') ||
+                num(b, 'data-urgency') - num(a, 'data-urgency') ||
+                (a.getAttribute('data-title') || '').localeCompare(
+                  b.getAttribute('data-title') || '',
+                  'ja',
+                ),
+            )
+            .forEach((li) => ul.appendChild(li));
+        }
+      };
+
+      buttons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const mode = btn.getAttribute('data-sort') || 'total';
+          buttons.forEach((b) => {
+            const on = b === btn;
+            b.classList.toggle('is-active', on);
+            b.setAttribute('aria-pressed', String(on));
+          });
+          sortAll(mode);
+        });
+      });
+    });
+  </script>
 
   <section>
     <h2>すべての課題カード（最新更新順）</h2>

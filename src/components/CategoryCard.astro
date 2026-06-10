@@ -20,7 +20,7 @@ const { id, title, description, issues = [] } = Astro.props;
   {issues.length > 0 ? (
     <ul class="category-issues">
       {issues.map((issue) => (
-        <li>
+        <li data-urgency={issue.data.urgency} data-severity={issue.data.severity} data-title={issue.data.title}>
           <a class={issue.data.urgency * issue.data.severity >= 15 ? 'title-critical' : undefined} href={sitePath(`/issues/${issue.id}`)}>{issue.data.title}</a>
           <span class="mini-rating" aria-label={`緊急度${issue.data.urgency}・深刻度${issue.data.severity}（各5段階）`}>
             緊{issue.data.urgency}・深{issue.data.severity}
