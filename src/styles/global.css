@@ -1015,7 +1015,34 @@ nav a:hover {
 .src-aggr { padding-left: 1.2em; display: grid; gap: var(--space-sm); }
 .src-aggr li { line-height: 1.6; }
 .src-cards { display: block; font-size: 0.82rem; color: var(--on-surface-variant); margin-top: 2px; }
-.footer-links { margin-top: var(--space-xs); }
+.footer-disclaimer {
+  margin-top: var(--space-lg);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--outline-variant);
+  max-width: 52rem;
+}
+.footer-disc-title {
+  margin: 0 0 var(--space-xs);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--on-surface);
+  line-height: 1.4;
+}
+.footer-disclaimer ul {
+  margin: 0;
+  padding-left: 1.1em;
+  display: grid;
+  gap: var(--space-xs);
+}
+.footer-disclaimer li {
+  font-size: 0.82rem;
+  line-height: 1.7;
+}
+.footer-disclaimer strong {
+  color: var(--on-surface);
+  font-weight: 700;
+}
+.footer-links { margin-top: var(--space-lg); }
 
 /* --- 印刷（PDF保存） --- */
 @media print {

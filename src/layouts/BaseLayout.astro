@@ -72,8 +72,24 @@ const pageTitle = title === '日本が先送りせず解くべき課題' ? title
     </main>
     <footer class="site-footer">
       <p>事実・解釈・提案を分け、出典と更新履歴を残しながら育てるオープンな課題地図です。</p>
+
+      <section class="footer-disclaimer" aria-label="このサイトについての注意書き">
+        <p class="footer-disc-title">このサイトについて（ディスクレーマー）</p>
+        <ul>
+          <li>
+            <strong>生成AIによる制作・評価版です。</strong>本文・図・サイトのコードは生成AIが作成し、人手で点検しています。誤りや古い情報を含む可能性があるため、重要な判断は各ページの一次出典に当たってご確認ください。気づいた点や事実誤認のご指摘（SNS等）を歓迎し、内容は随時更新します。
+          </li>
+          <li>
+            <strong>特定の政党・政治的立場（右派／左派）はとりません。</strong>「社会の持続可能性と生活の質（QOL）を、長期にわたって維持・向上できるか」を最優先の判断軸として課題を選び、緊急度と深刻度で優先度を示しています。賛否が分かれる論点は結論を断定せず、対立軸と出典を併記します。
+          </li>
+          <li>
+            <strong>中立を志向しますが、完全な無偏りを保証するものではありません。</strong>課題の選び方や表現に偏りが残ることがあります。事実・解釈・提案を分け、トレードオフや反対論も併記するよう努めています（編集方針は<a href={sitePath('/about')}>このサイトについて</a>）。
+          </li>
+        </ul>
+      </section>
+
       <p class="footer-links">
-        <a href={sitePath('/map')}>課題マップ</a>・<a href={sitePath('/tags')}>タグ一覧</a>・<a href={sitePath('/sources')}>出典・データ集</a>
+        <a href={sitePath('/map')}>課題マップ</a>・<a href={sitePath('/tags')}>タグ一覧</a>・<a href={sitePath('/sources')}>出典・データ集</a>・<a href={sitePath('/about')}>このサイトについて</a>
       </p>
     </footer>
   </body>
