@@ -103,11 +103,13 @@ p { text-wrap: pretty; }
 
 a {
   color: var(--primary);
-  text-decoration: none;
+  text-decoration: underline;
+  text-decoration-color: var(--outline-variant); /* 既定で薄いグレーの下線 */
+  text-decoration-thickness: 0.06em;
   text-underline-offset: 0.2em;
 }
 a:hover {
-  text-decoration: underline;
+  text-decoration-color: currentColor; /* ホバーでインク色に締まる */
   text-decoration-thickness: 0.08em;
 }
 
@@ -183,6 +185,7 @@ h3 {
   font-size: 1.18rem;
   color: var(--on-surface);
   letter-spacing: -0.01em;
+  text-decoration: none; /* ブランド名は下線なし */
 }
 nav {
   display: flex;
@@ -230,6 +233,7 @@ nav a:hover {
   color: var(--on-primary);
   border-radius: var(--radius-full);
   font-weight: 700;
+  text-decoration: none; /* ボタンは下線なし */
   transition: box-shadow 0.18s ease, background 0.18s ease;
 }
 .cta:hover {
@@ -366,7 +370,6 @@ nav a:hover {
 }
 .category-issues a {
   font-weight: 600;
-  text-decoration: none;
   color: var(--on-surface);
 }
 .category-issues a:hover {
@@ -431,8 +434,7 @@ nav a:hover {
   letter-spacing: 0;
 }
 .issue-content a {
-  text-decoration: underline;
-  text-underline-offset: 0.15em;
+  text-underline-offset: 0.15em; /* 下線は base の薄いグレーを継承（本文も統一） */
 }
 .issue-content :is(p, li) {
   line-height: 1.9;
