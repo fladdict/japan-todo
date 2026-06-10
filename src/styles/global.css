@@ -255,27 +255,18 @@ nav a:hover {
   text-decoration: none;
   background: var(--state-hover);
 }
-/* ナビ開閉（モバイル用 <details>）。PC では下の媒体クエリでトグルを隠し、nav をインライン常時表示する。
-   nav{display:flex} の作者規則が details の UA 非表示を上書きするため、PC では open 状態に関係なく表示される。 */
+/* ナビのトグル（モバイル専用）。PC では非表示で、nav{display:flex} によりナビがインライン常時表示。 */
 .nav-toggle {
   display: none; /* PC では非表示。モバイルで表示 */
-  list-style: none;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: 1px solid var(--outline-variant);
+  color: var(--on-surface);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
   cursor: pointer;
-}
-.nav-toggle::-webkit-details-marker {
-  display: none;
-}
-.nav-toggle::marker {
-  content: '';
-}
-/* PC: トグルを隠し、ナビは開閉状態に関係なくインライン常時表示（details の UA 非表示を確実に上書き） */
-@media (min-width: 761px) {
-  .nav-toggle {
-    display: none;
-  }
-  .nav-disclosure nav {
-    display: flex !important;
-  }
 }
 
 /* --- Footer --- */
@@ -1042,25 +1033,16 @@ nav a:hover {
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .nav-disclosure {
-    position: relative;
-    flex: none;
-  }
   /* ハンバーガーのトグル（タップ領域 40px 以上） */
   .nav-toggle {
     display: inline-flex;
-    align-items: center;
-    gap: 8px;
+    flex: none;
     min-height: 40px;
     padding: 8px 12px;
-    border: 1px solid var(--outline-variant);
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--on-surface);
     user-select: none;
     -webkit-tap-highlight-color: transparent;
   }
-  .nav-disclosure[open] .nav-toggle {
+  .nav-toggle[aria-expanded='true'] {
     background: var(--state-hover);
   }
   .nav-toggle-icon {
@@ -1085,17 +1067,17 @@ nav a:hover {
   .nav-toggle-icon::after {
     top: 5px;
   }
-  /* メニュー本体: 閉時は非表示、開時はヘッダー直下に右寄せドロップダウン */
-  .nav-disclosure nav {
+  /* メニュー本体: 閉時は非表示、開時はヘッダー直下に右寄せドロップダウン（.site-header が sticky=配置基準） */
+  #site-nav {
     display: none;
   }
-  .nav-disclosure[open] nav {
+  .nav-toggle[aria-expanded='true'] ~ #site-nav {
     display: flex;
     flex-direction: column;
     gap: 2px;
     position: absolute;
-    right: 0;
-    top: calc(100% + 8px);
+    right: 16px;
+    top: 100%;
     min-width: 220px;
     padding: var(--space-xs);
     background: var(--surface);
@@ -1103,7 +1085,7 @@ nav a:hover {
     box-shadow: 0 8px 24px rgba(20, 20, 20, 0.12);
     z-index: 30;
   }
-  .nav-disclosure[open] nav a {
+  .nav-toggle[aria-expanded='true'] ~ #site-nav a {
     display: flex;
     align-items: center;
     min-height: 40px;

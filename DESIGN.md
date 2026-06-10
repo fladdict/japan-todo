@@ -162,7 +162,7 @@ components:
 - **CTA/ボタン**: 黒のソリッド矩形、ホバーで**アクセント赤**反転。
 - **Details（詳細・根拠/実行プラン）**: outlined、サマリ行はリンク的に。
 - **Charts（`src/components/charts/`）**: LineChart（推移）/ BarChart（比較）/ StackedBarChart（内訳）。
-  ビルド時に**インラインSVG**へ描画（クライアントJSなし）。系列色は seriesColors を先頭から使用。
+  ビルド時に**インラインSVG**へ描画する（チャート自体はクライアントJSなしで動く）。系列色は seriesColors を先頭から使用。
   `<figure>` で囲み `<figcaption>` に**出典必須**、`<details>` にデータ表（a11y）。
 - **本質一文（essence）**: Layer1 要約ボックス冒頭に大きめ太字で1文。意思決定者の認知を一段上げる。
 - **政策判断サマリー（policy_summary）**: 左罫線のグレー面に6項目（いま何が問題か/なぜ今か/最大の制約/

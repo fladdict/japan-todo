@@ -32,22 +32,41 @@ const pageTitle = title === '日本が先送りせず解くべき課題' ? title
   <body>
     <header class="site-header">
       <a class="brand" href={sitePath('/')}>日本が先送りせず解くべき課題</a>
-      <!-- ナビ: PCはインライン表示。モバイルは <details> による開閉メニュー（JSなし・アクセシブル）。 -->
-      <details class="nav-disclosure">
-        <summary class="nav-toggle" aria-label="メニューを開閉">
-          <span class="nav-toggle-icon" aria-hidden="true"></span>
-          <span>メニュー</span>
-        </summary>
-        <nav aria-label="Main navigation">
-          <a href={sitePath('/')}>ホーム</a>
-          <a href={sitePath('/issues')}>課題一覧</a>
-          <a href={sitePath('/regulations')}>規制・法律</a>
-          <a href={sitePath('/map')}>課題マップ</a>
-          <a href={sitePath('/sources')}>出典・データ</a>
-          <a href={sitePath('/about')}>このサイトについて</a>
-        </nav>
-      </details>
+      <!-- ナビ: PC はインライン常時表示。モバイルはトグルで開閉（aria-expanded をJSで切替、CSSで表示制御）。 -->
+      <button
+        type="button"
+        class="nav-toggle"
+        aria-expanded="false"
+        aria-controls="site-nav"
+        aria-label="メニューを開閉"
+      >
+        <span class="nav-toggle-icon" aria-hidden="true"></span>
+        <span>メニュー</span>
+      </button>
+      <nav id="site-nav" aria-label="Main navigation">
+        <a href={sitePath('/')}>ホーム</a>
+        <a href={sitePath('/issues')}>課題一覧</a>
+        <a href={sitePath('/regulations')}>規制・法律</a>
+        <a href={sitePath('/map')}>課題マップ</a>
+        <a href={sitePath('/sources')}>出典・データ</a>
+        <a href={sitePath('/about')}>このサイトについて</a>
+      </nav>
     </header>
+    <script>
+      // モバイルのナビ開閉（プログレッシブ・エンハンスメント）。PC では CSS でトグルを隠しナビを常時表示。
+      const header = document.querySelector('.site-header');
+      const toggle = header?.querySelector<HTMLButtonElement>('.nav-toggle');
+      if (header && toggle) {
+        const setOpen = (open: boolean) => toggle.setAttribute('aria-expanded', String(open));
+        toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') setOpen(false);
+        });
+        document.addEventListener('click', (e) => {
+          if (!header.contains(e.target as Node)) setOpen(false);
+        });
+      }
+    </script>
     <main>
       <slot />
     </main>

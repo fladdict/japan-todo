@@ -24,6 +24,12 @@ This repository is a public knowledge base for urgent structural issues Japan sh
   - `npm run check`
   - `npm run build`
 
+## 技術方針（静的ホスティングと JavaScript）
+
+- 本サイトは GitHub Pages 上の**静的サイト**として配信する。「静的」とは**サーバー側の DB・API・動的処理を持たない**という意味であり、**クライアントサイドの JavaScript を禁止するものではない**。
+- 方針としては「ビルド時に解決できることはビルド時に」（例: チャートや図は Astro のビルド時に SVG 化）を好むが、**ナビゲーションの開閉・並び替え・グラフの強調など、プログレッシブ・エンハンスメントとしての軽量な JS は許容**する。
+- ただし JS は**必須にしない**設計を基本とし、JS 無効でも主要なコンテンツとリンクに到達できることを目安にする（過度な依存・重いランタイムは避ける）。
+
 ## Content quality bar
 
 A useful issue page should answer:
