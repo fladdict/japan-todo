@@ -7,9 +7,10 @@ import { execSync } from 'node:child_process';
 const ISSUE_DIR = 'src/content/issues';
 const today = new Date().toISOString().slice(0, 10);
 
-// categories.ts の日本語タイトル一覧を読む
+// categories.ts の日本語タイトル一覧／id 一覧を読む
 const catSrc = fs.readFileSync('src/data/categories.ts', 'utf8');
 const catTitles = [...catSrc.matchAll(/title:\s*'([^']+)'/g)].map((m) => m[1]);
+const catIds = new Set([...catSrc.matchAll(/^\s*id:\s*'([^']+)'/gm)].map((m) => m[1]));
 
 const files = execSync(`find ${ISSUE_DIR} -name '*.mdx'`, { encoding: 'utf8' }).trim().split('\n');
 const slugs = new Set(files.map((f) => f.replace(`${ISSUE_DIR}/`, '').replace('.mdx', '')));
@@ -70,6 +71,39 @@ for (const file of files) {
   const nums = (body.match(/\d[\d,.]*\s*(?:%|％|兆円|億円|万人|万件|万世帯|人|件|年|割|ポイント)/g) || []).length;
   digest.push({ slug, nums, srcCount, status, maturity });
   if (nums >= 5 && srcCount === 0) W(`本文に数値${nums}件あるが sources が0件`);
+}
+
+// --- 規制・法律リスト（src/data/regulations.ts）の検証 ---
+const REG_FILE = 'src/data/regulations.ts';
+if (fs.existsSync(REG_FILE)) {
+  const regSrc = fs.readFileSync(REG_FILE, 'utf8');
+  const RE = (m) => errors.push(`regulations.ts: ${m}`);
+
+  // id 一意性（行頭 id: のみ。categoryId は別キーなので拾わない）
+  const ids = [...regSrc.matchAll(/^\s*id:\s*'([^']+)'/gm)].map((m) => m[1]);
+  const seen = new Set();
+  for (const id of ids) {
+    if (seen.has(id)) RE(`重複した id: ${id}`);
+    seen.add(id);
+  }
+
+  // categoryId が categories.ts の id に存在
+  for (const m of regSrc.matchAll(/categoryId:\s*'([^']+)'/g)) {
+    if (!catIds.has(m[1])) RE(`categoryId "${m[1]}" が categories.ts の id に不一致`);
+  }
+
+  // related の id が実在 issue に存在
+  for (const block of regSrc.matchAll(/related:\s*\[([\s\S]*?)\]/g)) {
+    for (const idm of block[1].matchAll(/'([^']+)'/g)) {
+      if (!slugs.has(idm[1])) RE(`related に存在しない issue id: ${idm[1]}`);
+    }
+  }
+
+  // 出典 URL 形式
+  const regUrls = [...regSrc.matchAll(/url:\s*'([^']+)'/g)].map((m) => m[1]);
+  for (const u of regUrls) if (!/^https?:\/\/.+/.test(u)) RE(`不正なURL形式: ${u}`);
+
+  console.log(`\n規制・法律リスト: ${ids.length}件 / 出典 ${regUrls.length}件`);
 }
 
 // --- 出力 ---

@@ -1,0 +1,21 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import RegulationList from '../components/RegulationList.astro';
+import { regulations } from '../data/regulations';
+
+const issues = await getCollection('issues');
+const issueTitles = Object.fromEntries(issues.map((i) => [i.id, i.data.title]));
+---
+
+<BaseLayout
+  title="構造改革で論点となる規制・法律"
+  description="日本の構造改革で改革の是非が議論されている主な規制・法律を、分類ごとに公式出典つきで中立に整理した索引。"
+>
+  <h1>構造改革で論点となる規制・法律</h1>
+  <p class="lead">
+    構造課題の背景で、改革の是非が議論されている主な規制・法律を、分類ごとに公式出典つきで中立に整理した索引です（{regulations.length}件）。
+    「阻害している」と断定するものではなく、論点の所在を示し、関連する課題カードにつなぐことを目的とします。詳しい論点は各課題カードをご覧ください。
+  </p>
+  <RegulationList issueTitles={issueTitles} />
+</BaseLayout>

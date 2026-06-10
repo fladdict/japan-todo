@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CategoryCard from '../components/CategoryCard.astro';
 import IssueCard from '../components/IssueCard.astro';
+import RegulationList from '../components/RegulationList.astro';
 import { categories } from '../data/categories';
 import { sitePath } from '../lib/url';
 
@@ -10,6 +11,7 @@ const issues = (await getCollection('issues')).sort(
   (a, b) => b.data.last_reviewed.getTime() - a.data.last_reviewed.getTime(),
 );
 const featuredIssues = issues;
+const issueTitles = Object.fromEntries(issues.map((i) => [i.id, i.data.title]));
 // 既定は「重要度（緊急度×深刻度）」降順。同点は深刻度→緊急度→タイトルで安定化。
 // JS なしでもこの順で並ぶ（ボタンはプログレッシブ・エンハンスメント）。
 const score = (i: { data: { urgency: number; severity: number } }) =>
@@ -95,6 +97,16 @@ const issuesByCategory = (title: string) =>
       });
     });
   </script>
+
+  <section class="reg-section">
+    <div class="section-head">
+      <h2>構造改革で論点となる規制・法律</h2>
+    </div>
+    <p class="lead reg-lead">
+      上記の構造課題の背景で、改革の是非が議論されている主な規制・法律を、分類ごとに公式出典つきで中立に整理した索引です。各項目は関連する課題カードにつないでいます。詳しい論点は課題カード側をご覧ください。
+    </p>
+    <RegulationList issueTitles={issueTitles} />
+  </section>
 
   <section>
     <h2>すべての課題カード（最新更新順）</h2>

@@ -1,0 +1,57 @@
+---
+import { categories } from '../data/categories';
+import { regulations as allRegs, type Regulation } from '../data/regulations';
+import { sitePath } from '../lib/url';
+
+interface Props {
+  regulations?: Regulation[];
+  issueTitles: Record<string, string>; // issue id -> title（関連課題の表示名解決）
+}
+const { regulations = allRegs, issueTitles } = Astro.props;
+
+const inCategory = (id: string) => regulations.filter((r) => r.categoryId === id);
+---
+
+<div class="reg-list">
+  {categories.map((category) => {
+    const items = inCategory(category.id);
+    if (items.length === 0) return null;
+    return (
+      <section class="reg-cat">
+        <h3>
+          <a href={sitePath(`/categories/${category.id}`)}>{category.title}</a>
+          <span class="reg-count">{items.length}</span>
+        </h3>
+        <ul class="reg-items">
+          {items.map((r) => (
+            <li class="reg-item">
+              <div class="reg-item-head">
+                <span class="reg-name">{r.name}</span>
+                {r.status && <span class="reg-status">{r.status}</span>}
+              </div>
+              <p class="reg-point">{r.point}</p>
+              <div class="reg-foot">
+                {r.related.filter((id) => issueTitles[id]).length > 0 && (
+                  <span class="reg-related">
+                    <span class="reg-foot-label">関連課題</span>
+                    {r.related
+                      .filter((id) => issueTitles[id])
+                      .map((id) => (
+                        <a class="map-rel-chip" href={sitePath(`/issues/${id}`)}>{issueTitles[id]}</a>
+                      ))}
+                  </span>
+                )}
+                <span class="reg-sources">
+                  <span class="reg-foot-label">出典</span>
+                  {r.sources.map((s, i) => (
+                    <>{i > 0 && <span aria-hidden="true"> ・ </span>}<a href={s.url}>{s.publisher ?? s.title}</a></>
+                  ))}
+                </span>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+    );
+  })}
+</div>
